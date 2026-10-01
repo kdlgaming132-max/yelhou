@@ -1,0 +1,2576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YELHOU - Discover Manipur</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        abyss: '#08090A',
+                        frosted: '#161B22',
+                        cyanAccent: '#00F5D4',
+                        violetAccent: '#7B2CBF',
+                        mistGrey: '#94A3B8',
+                        Yelhou: {
+                            gold: '#D4B873',
+                            surface: '#161B22'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #08090A;
+            color: #FFFFFF;
+            font-family: 'Inter', sans-serif;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(123, 44, 191, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 245, 212, 0.12) 0%, transparent 40%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        /* Glassmorphism card utility */
+        .glass-panel {
+            background: rgba(22, 27, 34, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(148, 163, 184, 0.12);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-panel-hover:hover {
+            border-color: rgba(0, 245, 212, 0.35);
+            box-shadow: 0 10px 30px -10px rgba(0, 245, 212, 0.25);
+        }
+
+        .glow-cyan {
+            box-shadow: 0 0 20px rgba(0, 245, 212, 0.35);
+        }
+
+        .glow-violet {
+            box-shadow: 0 0 20px rgba(123, 44, 191, 0.4);
+        }
+
+        /* Custom Checkbox CSS */
+        .cyber-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            border: 2px solid #94A3B8;
+            border-radius: 6px;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.25s ease;
+            background: rgba(8, 9, 10, 0.6);
+        }
+
+        .cyber-checkbox:checked {
+            background-color: #00F5D4;
+            border-color: #00F5D4;
+            box-shadow: 0 0 12px rgba(0, 245, 212, 0.6);
+        }
+
+        .cyber-checkbox:checked::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: #08090A;
+            font-size: 13px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Progress Circle */
+        .circle-bg {
+            fill: none;
+            stroke: rgba(148, 163, 184, 0.15);
+        }
+
+        .circle-progress {
+            fill: none;
+            stroke: #00F5D4;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #08090A;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00F5D4;
+        }
+        .invisible-scrollbar {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .invisible-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            appearance: textfield;
+            -moz-appearance: textfield;
+        }
+        @keyframes bell-shake {
+            0%, 100% { transform: rotate(0); }
+            20%, 60% { transform: rotate(-14deg); }
+            40%, 80% { transform: rotate(14deg); }
+        }
+        @keyframes refresh-rotation {
+            to { transform: rotate(360deg); }
+        }
+        .bell-shake {
+            animation: bell-shake 600ms ease-in-out;
+            transform-origin: top center;
+        }
+        .refresh-rotation {
+            animation: refresh-rotation 650ms linear infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .bell-shake, .refresh-rotation { animation-duration: 1ms; }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen text-slate-100 antialiased selection:bg-cyanAccent selection:text-abyss">
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-slate-800/80 px-4 lg:px-8 py-3">
+        <div class="max-w-7xl mx-auto flex flex-wrap lg:flex-nowrap items-center justify-between gap-x-4 gap-y-3">
+            
+            <!-- Logo Section -->
+            <a href="#" onclick="event.preventDefault(); switchView('dashboard')" class="order-1 flex shrink-0 items-center gap-2 sm:gap-3 group">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-Yelhou-gold/40 flex items-center justify-center bg-Yelhou-surface/60 group-hover:border-Yelhou-gold transition-colors shadow-inner">
+                    <svg viewBox="0 0 24 24" class="w-5 h-5 sm:w-6 sm:h-6 text-Yelhou-gold" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 21V12" />
+                        <path d="M12 12C9.5 9 6 7 3 7" />
+                        <path d="M5.5 8.5C5 6 5.5 4 7 3" />
+                        <path d="M12 12C14.5 9 18 7 21 7" />
+                        <path d="M18.5 8.5C19 6 18.5 4 17 3" />
+                        <path d="M12 15C10 14 8 13.5 6 14" />
+                        <path d="M12 15C14 14 16 13.5 18 14" />
+                    </svg>
+                </div>
+                <span class="flex flex-col">
+                    <span id="brand-wordmark" class="font-serif text-xl sm:text-2xl tracking-[0.12em] sm:tracking-[0.2em] font-semibold text-white uppercase leading-none">YELHOU</span>
+                    <span id="brand-subtitle" class="text-[8px] sm:text-[9px] tracking-[0.2em] sm:tracking-[0.3em] font-medium text-Yelhou-gold/90 uppercase mt-0.5">Manipur Fitness</span>
+                </span>
+            </a>
+
+            <!-- Overall Progress bar -->
+            <div class="order-3 w-full lg:order-2 lg:w-1/5 flex flex-col space-y-0.5">
+                <div class="flex justify-between text-[10px] sm:text-xs font-semibold">
+                    <span class="text-mistGrey uppercase tracking-wider flex items-center gap-1">
+                        <i class="fa-solid fa-chart-line text-cyanAccent"></i> Daily Goal Progress
+                    </span>
+                    <span id="overall-percentage" class="text-cyanAccent font-bold">0%</span>
+                </div>
+                <div class="w-full bg-slate-900 rounded-full h-1.5 lg:h-2 overflow-hidden border border-slate-800">
+                    <div id="overall-progress-bar" class="bg-gradient-to-r from-violetAccent to-cyanAccent h-full rounded-full transition-all duration-500 w-0"></div>
+                </div>
+            </div>
+
+            <!-- Primary Actions -->
+            <div class="order-4 flex w-full items-center justify-end gap-2 lg:order-3 lg:w-auto">
+                <button onclick="resetAllDaily()" class="whitespace-nowrap px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-semibold bg-slate-900 hover:bg-slate-800 border border-slate-700/60 text-slate-300 hover:text-white transition flex items-center gap-1.5 sm:gap-2">
+                    <i class="fa-solid fa-rotate-right text-cyanAccent"></i>
+                    <span>Reset Day</span>
+                </button>
+                <button onclick="openCreateModuleModal()" class="whitespace-nowrap px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold bg-cyanAccent text-abyss hover:bg-cyan-300 transition glow-cyan flex items-center gap-1.5 sm:gap-2">
+                    <i class="fa-solid fa-plus font-black"></i>
+                    <span>New Module</span>
+                </button>
+            </div>
+
+            <!-- Account and Notifications -->
+            <div class="order-2 ml-auto flex shrink-0 items-center gap-1 lg:order-4 lg:ml-0">
+                <button type="button" onclick="openProfileView()" aria-label="View profile" class="flex items-center gap-1.5 sm:gap-2 rounded-full px-1 py-1 text-left hover:bg-slate-800/60 transition">
+                    <img id="profile-avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=96&h=96&q=80" alt="Profile photo" class="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover shrink-0">
+                    <span id="profile-name" class="text-[11px] sm:text-xs font-bold text-white whitespace-nowrap">Your Profile</span>
+                </button>
+                <div id="notification-bell-wrap" class="relative">
+                    <button type="button" onclick="animateNotificationBell(this)" aria-label="Notifications" aria-haspopup="true" aria-expanded="false" aria-controls="notification-panel" title="Notifications" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full text-slate-300 hover:text-cyanAccent hover:bg-slate-800/60 transition flex items-center justify-center">
+                        <i class="fa-regular fa-bell"></i>
+                    </button>
+                    <section id="notification-panel" class="hidden absolute right-0 top-full mt-3 z-50 w-80 max-w-[calc(100vw-2rem)] overflow-hidden rounded-xl border border-slate-700 bg-slate-950 shadow-2xl" style="max-height: min(70vh, 32rem)" aria-label="Notifications" aria-live="polite">
+                        <div class="flex items-center justify-between border-b border-slate-800 px-4 py-3">
+                            <div>
+                                <h2 class="text-sm font-bold text-white">Notifications</h2>
+                                <p class="mt-0.5 text-[10px] text-mistGrey">Workout and nutrition updates</p>
+                            </div>
+                            <button type="button" onclick="closeNotificationPanel()" aria-label="Close notifications" class="w-8 h-8 rounded-full text-mistGrey hover:text-white hover:bg-slate-800 flex items-center justify-center">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <div id="notification-list" class="max-h-[calc(70vh-4.5rem)] overflow-y-auto"></div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 lg:px-8 py-8">
+        
+        <!-- DASHBOARD VIEW -->
+        <section id="dashboard-view" class="space-y-8">
+            <!-- Modules Grid -->
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-cubes text-cyanAccent"></i> Active Tracker Modules
+                    </h3>
+                    <span id="module-count" class="text-xs text-mistGrey bg-slate-900 px-3 py-1 rounded-lg border border-slate-800">0 Modules</span>
+                </div>
+
+                <div id="modules-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Dynamic Modules Render Here -->
+                </div>
+            </div>
+
+            <!-- Hero Banner -->
+            <div class="glass-panel rounded-2xl p-6 lg:p-8 relative overflow-hidden border border-slate-800">
+                <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-violetAccent/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="relative z-10 max-w-2xl">
+                    <span class="text-xs font-bold tracking-widest text-cyanAccent uppercase bg-cyanAccent/10 px-3 py-1 rounded-full border border-cyanAccent/20">Cyber Fitness Dashboard</span>
+                    <h2 class="text-2xl lg:text-3xl font-extrabold mt-3 mb-2 text-white">Track Performance. Master Daily Routines At Yelhou.</h2>
+                    <p class="text-mistGrey text-sm leading-relaxed">
+                        Select a tracker module below to manage checkboxes, adjust targets, or build new custom routine frameworks for fitness and nutrition.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Global Quick Stats Bar -->
+            <div id="workout-summary-banner" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="glass-panel rounded-xl p-4 border border-slate-800 flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-cyanAccent/10 text-cyanAccent border border-cyanAccent/30 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-weight-hanging"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-mistGrey uppercase font-semibold">Total Lifted Today</div>
+                        <div id="stat-total-volume" class="text-xl font-black text-white">0 kg</div>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-xl p-4 border border-slate-800 flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-violetAccent/20 text-violet-300 border border-violetAccent/40 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-fire-flame-curved"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-mistGrey uppercase font-semibold">Sets Completed Today</div>
+                        <div id="stat-total-sets" class="text-xl font-black text-white">0 Sets</div>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-xl p-4 border border-slate-800 flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-cyanAccent/10 text-cyanAccent border border-cyanAccent/30 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-mistGrey uppercase font-semibold">Max Weight Today</div>
+                        <div id="stat-max-weight" class="text-xl font-black text-white">0 kg</div>
+                    </div>
+                </div>
+            </div>
+
+            <section id="fitness-overview" class="space-y-5">
+                <div class="flex flex-wrap items-end justify-between gap-3">
+                    <div>
+                        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-Yelhou-gold">Training Overview</p>
+                        <h2 class="mt-1 text-xl font-bold text-white">Today at a glance</h2>
+                        <p id="dashboard-gym-name" class="mt-1 text-xs text-mistGrey">Gym not set</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
+                    <article class="glass-panel rounded-xl p-4 border border-slate-800">
+                        <p class="text-[10px] font-bold uppercase tracking-wider text-mistGrey">Weight target</p>
+                        <div class="mt-3 flex items-baseline gap-2">
+                            <strong id="dashboard-current-weight" class="text-2xl text-white">--</strong>
+                            <span class="text-mistGrey">to</span>
+                            <strong id="dashboard-target-weight" class="text-lg text-cyanAccent">--</strong>
+                        </div>
+                        <p id="dashboard-weight-note" class="mt-2 text-[11px] text-mistGrey">Add your current and target weight.</p>
+                    </article>
+                    <article class="glass-panel rounded-xl p-4 border border-slate-800">
+                        <div class="flex items-center justify-between">
+                            <p class="text-[10px] font-bold uppercase tracking-wider text-mistGrey">Calories</p>
+                            <i class="fa-solid fa-fire text-orange-300"></i>
+                        </div>
+                        <p class="mt-3 text-xl font-bold text-white"><span id="dashboard-calories">--</span><span class="text-xs font-medium text-mistGrey"> / <span id="dashboard-calories-goal">--</span> kcal</span></p>
+                        <div class="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-900"><div id="dashboard-calories-bar" class="h-full rounded-full bg-orange-300 transition-all" style="width:0%"></div></div>
+                        <p id="dashboard-calories-note" class="mt-2 text-[11px] text-mistGrey">Totals use checked meals.</p>
+                    </article>
+                    <article class="glass-panel rounded-xl p-4 border border-slate-800">
+                        <div class="flex items-center justify-between">
+                            <p class="text-[10px] font-bold uppercase tracking-wider text-mistGrey">Protein</p>
+                            <i class="fa-solid fa-drumstick-bite text-cyanAccent"></i>
+                        </div>
+                        <p class="mt-3 text-xl font-bold text-white"><span id="dashboard-protein">--</span><span class="text-xs font-medium text-mistGrey"> / <span id="dashboard-protein-goal">--</span> g</span></p>
+                        <div class="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-900"><div id="dashboard-protein-bar" class="h-full rounded-full bg-cyanAccent transition-all" style="width:0%"></div></div>
+                        <p id="dashboard-protein-note" class="mt-2 text-[11px] text-mistGrey">Totals use checked meals.</p>
+                    </article>
+                    <article class="glass-panel rounded-xl p-4 border border-slate-800">
+                        <div class="flex items-center justify-between">
+                            <p class="text-[10px] font-bold uppercase tracking-wider text-mistGrey">Water today</p>
+                            <i class="fa-solid fa-droplet text-sky-300"></i>
+                        </div>
+                        <p class="mt-3 text-xl font-bold text-white"><span id="dashboard-water">0</span><span class="text-xs font-medium text-mistGrey"> / <span id="dashboard-water-goal">2.5</span> L</span></p>
+                        <div class="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-900"><div id="dashboard-water-bar" class="h-full rounded-full bg-sky-300 transition-all" style="width:0%"></div></div>
+                        <div class="mt-3 flex items-center gap-2">
+                            <button type="button" onclick="addWaterIntake(250)" class="px-2.5 py-1 rounded-md bg-slate-800 text-[10px] font-bold text-sky-200 hover:bg-slate-700">+0.25 L</button>
+                            <input id="custom-water-amount" type="number" min="0.1" step="0.1" placeholder="L" class="w-16 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-[10px] text-white">
+                            <button type="button" onclick="addCustomWaterIntake()" class="text-[10px] font-bold text-cyanAccent hover:text-white">Add</button>
+                            <button type="button" onclick="resetWaterIntake()" aria-label="Reset today's water intake" title="Reset today's water intake" class="ml-auto px-2 py-1 text-[10px] font-bold text-slate-400 hover:text-red-300">
+                                <i class="fa-solid fa-rotate-left mr-1"></i>Reset
+                            </button>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                    <article class="glass-panel rounded-xl p-5 border border-slate-800">
+                        <div class="flex items-center justify-between gap-3">
+                            <div>
+                                <h3 class="text-sm font-bold text-white">Today's workout</h3>
+                                <p class="mt-1 text-[11px] text-mistGrey">Checked sets from your gym tracker</p>
+                            </div>
+                            <span id="dashboard-workout-count" class="text-xs font-semibold text-cyanAccent">0 sets</span>
+                        </div>
+                        <div id="dashboard-today-workout" class="invisible-scrollbar mt-4 max-h-40 overflow-y-auto space-y-2 pr-1"></div>
+                    </article>
+                    <article class="glass-panel rounded-xl p-5 border border-slate-800">
+                        <div class="flex items-center justify-between gap-3">
+                            <div>
+                                <h3 class="text-sm font-bold text-white">Weekly workout completion</h3>
+                                <p class="mt-1 text-[11px] text-mistGrey">Checked gym sets by day · last 7 days</p>
+                            </div>
+                            <span id="dashboard-weekly-days" class="text-xs font-semibold text-cyanAccent">0 / 7 days</span>
+                        </div>
+                        <div id="dashboard-weekly-chart" class="mt-4"></div>
+                    </article>
+                </div>
+
+                <article class="glass-panel rounded-xl p-5 border border-slate-800">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                            <h3 class="text-sm font-bold text-white">Weight progress</h3>
+                            <p id="dashboard-progress-note" class="mt-1 text-[11px] text-mistGrey">Log weigh-ins to see your trend against your target.</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input id="weigh-in-input" type="number" min="1" step="0.1" placeholder="Weight kg" class="w-28 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-white">
+                            <button type="button" onclick="logWeightProgress()" class="px-3 py-2 rounded-lg bg-slate-800 text-xs font-bold text-cyanAccent hover:bg-slate-700">Log weight</button>
+                        </div>
+                    </div>
+                    <div id="dashboard-weight-chart" class="mt-4 h-40 w-full"></div>
+                </article>
+            </section>
+
+        </section>
+
+        <!-- DETAILED CATEGORY CHECKBOX VIEW -->
+        <section id="category-view" class="hidden space-y-6">
+            
+            <!-- Back & Header Bar -->
+            <div class="flex flex-wrap items-center justify-between gap-4 glass-panel p-4 rounded-2xl">
+                <button onclick="switchView('dashboard')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left text-cyanAccent"></i>
+                    <span>Back to Dashboard</span>
+                </button>
+
+                <div id="active-category-title-section" class="flex items-center space-x-3">
+                    <!-- Dynamic Title & Icon -->
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <button id="quick-log-button" onclick="openQuickLogModal('')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-cyanAccent/20 border border-cyanAccent/40 text-cyanAccent hover:bg-cyanAccent/30 transition flex items-center gap-2">
+                        <i class="fa-solid fa-calculator"></i>
+                        <span>Log Weight & Sets</span>
+                    </button>
+                    <button onclick="openAddSectionModal()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-violetAccent/20 border border-violetAccent/40 text-violet-300 hover:bg-violetAccent/30 transition flex items-center gap-2">
+                        <i class="fa-solid fa-folder-plus"></i>
+                        <span>Add Sub-Section</span>
+                    </button>
+                    <button onclick="deleteActiveCategory()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-trash-can"></i>
+                        <span>Delete Tracker</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Detailed Checkbox Sections Grid -->
+            <div id="sections-container" class="space-y-6">
+                <!-- Checkbox Sub-sections injected dynamically -->
+            </div>
+
+            <section id="today-meal-section" class="hidden glass-panel rounded-2xl p-6 border border-slate-800 space-y-5">
+                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
+                    <div>
+                        <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-bowl-food text-violet-300"></i> Today's Meals
+                        </h3>
+                        <p class="mt-1 text-xs text-mistGrey">Nutrition totals include checked meals only.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="openQuickFoodModal()" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-cyanAccent/10 border border-cyanAccent/30 text-cyanAccent hover:bg-cyanAccent/20">
+                            <i class="fa-solid fa-plus mr-1"></i> Add Food
+                        </button>
+                        <span id="today-meal-count" class="text-xs text-mistGrey">0 meals</span>
+                        <button type="button" onclick="refreshTodayMeals(this)" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 border border-slate-700 text-cyanAccent hover:bg-slate-800" title="Refresh today's meal totals">
+                            <i id="meal-refresh-icon" class="fa-solid fa-rotate mr-1"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+                <div id="today-meal-metrics" class="grid grid-cols-2 lg:grid-cols-4 gap-3"></div>
+                <form id="meal-goals-form" onsubmit="saveMealGoals(event)" class="space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h4 class="text-xs font-bold text-white uppercase tracking-wider">Daily Goals</h4>
+                        <div class="flex flex-col items-end gap-1">
+                            <button type="submit" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 border border-slate-700 text-cyanAccent hover:bg-slate-700">Save Goals</button>
+                            <p id="saved-meal-goals" class="text-[10px] text-mistGrey text-right" aria-live="polite"></p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                        <label class="block text-[11px] text-mistGrey">Calories (kcal)<input id="goal-calories" type="number" min="0" step="1" placeholder="Set goal" class="mt-1 w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-cyanAccent"></label>
+                        <label class="block text-[11px] text-mistGrey">Protein (g)<input id="goal-protein" type="number" min="0" step="0.1" placeholder="Set goal" class="mt-1 w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-cyanAccent"></label>
+                        <label class="block text-[11px] text-mistGrey">Carbs (g)<input id="goal-carbs" type="number" min="0" step="0.1" placeholder="Set goal" class="mt-1 w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-cyanAccent"></label>
+                        <label class="block text-[11px] text-mistGrey">Fat (g)<input id="goal-fat" type="number" min="0" step="0.1" placeholder="Set goal" class="mt-1 w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-cyanAccent"></label>
+                    </div>
+                </form>
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[640px] text-left text-xs">
+                        <thead>
+                            <tr class="text-mistGrey border-b border-slate-800 uppercase tracking-wider">
+                                <th class="py-2.5 px-3">Meal</th>
+                                <th class="py-2.5 px-3">Ingredients</th>
+                                <th class="py-2.5 px-3">Calories</th>
+                                <th class="py-2.5 px-3">Protein</th>
+                                <th class="py-2.5 px-3">Carbs</th>
+                                <th class="py-2.5 px-3">Fat</th>
+                            </tr>
+                        </thead>
+                        <tbody id="today-meal-tbody" class="divide-y divide-slate-800/60"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Daily Gym Logged Exercises Table -->
+            <div id="workout-log-section" class="glass-panel rounded-2xl p-6 border border-slate-800 space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-800/80 pb-3">
+                    <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-list-numeric text-cyanAccent"></i>
+                        <span>Today's Weight & Reps Log</span>
+                    </h3>
+                    <span id="log-count-badge" class="text-xs text-cyanAccent bg-cyanAccent/10 border border-cyanAccent/30 px-2.5 py-0.5 rounded-full font-semibold">0 Entries</span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead>
+                            <tr class="text-mistGrey border-b border-slate-800 uppercase tracking-wider">
+                                <th class="py-2.5 px-3">Exercise</th>
+                                <th class="py-2.5 px-3">Muscle Group</th>
+                                <th class="py-2.5 px-3">Set #</th>
+                                <th class="py-2.5 px-3">Reps</th>
+                                <th class="py-2.5 px-3">Weight (kg)</th>
+                                <th class="py-2.5 px-3">Total Volume</th>
+                                <th class="py-2.5 px-3 text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="workout-log-tbody" class="divide-y divide-slate-800/60">
+                            <!-- Injected dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="app-toast" class="fixed bottom-4 left-1/2 z-[100] hidden rounded-lg border border-cyanAccent/40 bg-slate-900 px-4 py-3 text-sm font-semibold text-cyanAccent shadow-xl" style="left: 50%; transform: translateX(-50%)" role="status" aria-live="polite"></div>
+
+    <div id="modal-quick-food" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-xl rounded-2xl border border-slate-700 p-6 space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div>
+                    <h2 class="text-lg font-bold text-white">Add food</h2>
+                    <p class="mt-1 text-xs text-mistGrey">Nutrition values apply to the quantity entered.</p>
+                </div>
+                <button type="button" onclick="closeModal('modal-quick-food')" aria-label="Close add food" class="w-9 h-9 rounded-full text-mistGrey hover:bg-slate-800 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="form-quick-food" onsubmit="handleQuickFoodEntry(event)" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label class="text-xs font-semibold text-mistGrey">Food name<input id="quick-food-name" type="text" required maxlength="80" placeholder="e.g. Rice, eggs, yogurt" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2.5 text-sm text-white focus:border-cyanAccent focus:outline-none"></label>
+                    <label class="text-xs font-semibold text-mistGrey">Quantity (g)<input id="quick-food-quantity" type="number" required min="0.1" step="0.1" placeholder="e.g. 150" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2.5 text-sm text-white focus:border-cyanAccent focus:outline-none"></label>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <label class="text-[11px] font-semibold text-mistGrey">Calories<input id="quick-food-calories" type="number" min="0" step="0.1" placeholder="kcal" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white focus:border-cyanAccent focus:outline-none"></label>
+                    <label class="text-[11px] font-semibold text-mistGrey">Protein<input id="quick-food-protein" type="number" min="0" step="0.1" placeholder="g" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white focus:border-cyanAccent focus:outline-none"></label>
+                    <label class="text-[11px] font-semibold text-mistGrey">Carbs<input id="quick-food-carbs" type="number" min="0" step="0.1" placeholder="g" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white focus:border-cyanAccent focus:outline-none"></label>
+                    <label class="text-[11px] font-semibold text-mistGrey">Fat<input id="quick-food-fat" type="number" min="0" step="0.1" placeholder="g" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white focus:border-cyanAccent focus:outline-none"></label>
+                </div>
+                <p class="text-[11px] text-mistGrey">Leave nutrient values blank if unknown. Recognized foods can use the built-in estimate.</p>
+                <div class="flex justify-end gap-3 border-t border-slate-800 pt-4">
+                    <button type="button" onclick="closeModal('modal-quick-food')" class="px-4 py-2 rounded-lg text-xs font-semibold text-mistGrey hover:bg-slate-800">Cancel</button>
+                    <button type="submit" class="px-5 py-2 rounded-lg bg-cyanAccent text-xs font-bold text-abyss hover:bg-cyan-300">Add to Today</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-profile-view" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-lg rounded-2xl border border-slate-700 p-6 space-y-5">
+            <div class="flex items-start justify-between border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-3">
+                    <img id="profile-view-photo" src="" alt="Profile photo" class="w-14 h-14 rounded-full object-cover bg-slate-800">
+                    <div>
+                        <h2 id="profile-view-name" class="text-lg font-bold text-white">Your Profile</h2>
+                        <p id="profile-view-gym" class="mt-1 text-xs text-mistGrey">Gym not set</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeModal('modal-profile-view')" aria-label="Close profile details" class="w-9 h-9 rounded-full text-mistGrey hover:bg-slate-800 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <dl class="grid grid-cols-2 gap-x-5 gap-y-4">
+                <div><dt class="text-[10px] uppercase tracking-wider text-mistGrey">Age</dt><dd id="profile-view-age" class="mt-1 text-sm font-semibold text-white">Not set</dd></div>
+                <div><dt class="text-[10px] uppercase tracking-wider text-mistGrey">Height</dt><dd id="profile-view-height" class="mt-1 text-sm font-semibold text-white">Not set</dd></div>
+                <div><dt class="text-[10px] uppercase tracking-wider text-mistGrey">Current weight</dt><dd id="profile-view-current-weight" class="mt-1 text-sm font-semibold text-white">Not set</dd></div>
+                <div><dt class="text-[10px] uppercase tracking-wider text-mistGrey">Target weight</dt><dd id="profile-view-target-weight" class="mt-1 text-sm font-semibold text-white">Not set</dd></div>
+                <div><dt class="text-[10px] uppercase tracking-wider text-mistGrey">Fitness goal</dt><dd id="profile-view-goal" class="mt-1 text-sm font-semibold text-white">Not set</dd></div>
+                <div><dt class="text-[10px] uppercase tracking-wider text-mistGrey">Daily water target</dt><dd id="profile-view-water-goal" class="mt-1 text-sm font-semibold text-white">2.5 L</dd></div>
+            </dl>
+            <div class="flex justify-end border-t border-slate-800 pt-4">
+                <button type="button" onclick="closeModal('modal-profile-view'); openProfileModal()" class="px-4 py-2 rounded-lg bg-cyanAccent text-xs font-bold text-abyss hover:bg-cyan-300">Edit Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-profile" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-slate-700 p-6 space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div>
+                    <h2 class="text-lg font-bold text-white">Your fitness profile</h2>
+                    <p class="mt-1 text-xs text-mistGrey">Personalize your dashboard targets.</p>
+                </div>
+                <button type="button" onclick="closeModal('modal-profile')" aria-label="Close profile" class="w-9 h-9 rounded-full text-mistGrey hover:bg-slate-800 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="form-profile" onsubmit="saveUserProfile(event)" class="space-y-5">
+                <div class="flex items-center gap-4">
+                    <img id="profile-photo-preview" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=160&h=160&q=80" alt="Profile preview" class="w-16 h-16 rounded-full object-cover bg-slate-800">
+                    <label class="cursor-pointer text-xs font-semibold text-cyanAccent hover:text-white">
+                        <span>Choose profile photo</span>
+                        <input id="profile-photo-input" type="file" accept="image/*" onchange="previewProfilePhoto(event)" class="sr-only">
+                    </label>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <label class="text-xs font-semibold text-mistGrey">Name<input id="profile-name-input" type="text" required maxlength="60" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2.5 text-sm text-white focus:border-cyanAccent focus:outline-none"></label>
+                    <label class="text-xs font-semibold text-mistGrey">Gym name<input id="profile-gym-name-input" type="text" maxlength="80" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2.5 text-sm text-white focus:border-cyanAccent focus:outline-none"></label>
+                    <label class="text-xs font-semibold text-mistGrey">Age<input id="profile-age-input" type="number" min="13" max="120" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2.5 text-sm text-white focus:border-cyanAccent focus:outline-none"></label>
+                    <label class="text-xs font-semibold text-mistGrey">Height (cm)<input id="profile-height-input" type="number" min="50" max="260" step="0.1" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2.5 text-sm text-white focus:border-cyanAccent focus:outline-none"></label>
+                    <label class="text-xs font-semibold text-mistGrey">Current weight (kg)<input id="profile-current-weight-input" type="number" min="1" max="500" step="0.1" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2.5 text-sm text-white focus:border-cyanAccent focus:outline-none"></label>
+                    <label class="text-xs font-semibold text-mistGrey">Fitness goal<select id="profile-goal-input" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2.5 text-sm text-white focus:border-cyanAccent focus:outline-none"><option value="">Choose goal</option><option value="Muscle gain">Muscle gain</option><option value="Fat loss">Fat loss</option><option value="Maintenance">Maintenance</option></select></label>
+                    <label class="text-xs font-semibold text-mistGrey">Target weight (kg)<input id="profile-target-weight-input" type="number" min="1" max="500" step="0.1" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2.5 text-sm text-white focus:border-cyanAccent focus:outline-none"></label>
+                    <label class="text-xs font-semibold text-mistGrey">Daily water target (L)<input id="profile-water-goal-input" type="number" min="0.25" max="10" step="0.25" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2.5 text-sm text-white focus:border-cyanAccent focus:outline-none"></label>
+                </div>
+                <div class="flex justify-end gap-3 border-t border-slate-800 pt-4">
+                    <button type="button" onclick="closeModal('modal-profile')" class="px-4 py-2 rounded-lg text-xs font-semibold text-mistGrey hover:bg-slate-800">Cancel</button>
+                    <button type="submit" class="px-5 py-2 rounded-lg bg-cyanAccent text-xs font-bold text-abyss hover:bg-cyan-300">Save Profile</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Add Exercise Header -->
+    <div id="modal-add-exercise" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md rounded-2xl border border-slate-700 p-6 space-y-6">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i id="add-exercise-modal-icon" class="fa-solid fa-dumbbell text-cyanAccent"></i> <span id="add-exercise-modal-title">Add Exercise Title</span>
+                </h3>
+                <button onclick="closeModal('modal-add-exercise')" class="text-mistGrey hover:text-white">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <form id="form-add-exercise" onsubmit="handleAddExercise(event)" class="space-y-4">
+                <input type="hidden" id="target-exercise-sec-id">
+                
+                <div>
+                    <label id="add-exercise-name-label" for="exercise-title-input" class="block text-xs font-semibold text-mistGrey uppercase mb-2">Exercise Name</label>
+                    <input type="text" id="exercise-title-input" required placeholder="e.g. Bench Press, Incline DB Fly" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyanAccent">
+                </div>
+
+                <div class="pt-4 flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('modal-add-exercise')" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-mistGrey hover:text-white">Cancel</button>
+                    <button id="add-exercise-submit" type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-cyanAccent text-abyss hover:bg-cyan-300">Add Exercise</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Add Set to Exercise -->
+    <div id="modal-add-set" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md rounded-2xl border border-slate-700 p-6 space-y-6">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-plus-circle text-cyanAccent"></i> Add Set Entry
+                </h3>
+                <button onclick="closeModal('modal-add-set')" class="text-mistGrey hover:text-white">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <form id="form-add-set" onsubmit="handleAddSet(event)" class="space-y-4">
+                <input type="hidden" id="target-set-sec-id">
+                <input type="hidden" id="target-set-ex-id">
+                
+                <div>
+                    <label class="block text-xs font-semibold text-mistGrey uppercase mb-2">Set Label / Type</label>
+                    <input type="text" id="set-label-input" placeholder="e.g. Set 1, Warmup Set, Working Set" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyanAccent">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-mistGrey uppercase mb-2">Weight (kg)</label>
+                        <input type="number" id="set-weight-input" required min="0" step="0.5" value="60" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyanAccent">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-mistGrey uppercase mb-2">Reps</label>
+                        <input type="number" id="set-reps-input" required min="1" value="10" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyanAccent">
+                    </div>
+                </div>
+
+                <div class="pt-4 flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('modal-add-set')" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-mistGrey hover:text-white">Cancel</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-cyanAccent text-abyss hover:bg-cyan-300">Add Set</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Add Meal Ingredient -->
+    <div id="modal-add-ingredient" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl border border-slate-700 p-6 space-y-5">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-carrot text-cyanAccent"></i> <span id="ingredient-modal-title">Add Meal Details</span>
+                </h3>
+                <button type="button" onclick="closeModal('modal-add-ingredient')" class="text-mistGrey hover:text-white">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <form id="form-add-ingredient" onsubmit="handleAddIngredient(event)" class="space-y-4">
+                <input type="hidden" id="target-ingredient-sec-id">
+                <input type="hidden" id="target-ingredient-meal-id">
+                <p class="text-xs text-mistGrey">Enter nutrition values for each ingredient's full amount.</p>
+                <div id="ingredient-input-rows" class="max-h-[48vh] overflow-y-auto space-y-3"></div>
+                <div class="flex flex-wrap items-center justify-between gap-3 border-t border-slate-800 pt-4">
+                    <button id="add-more-ingredient-button" type="button" onclick="addIngredientInputRow()" disabled class="px-3 py-2 rounded-lg text-xs font-bold bg-slate-800 border border-slate-700 text-cyanAccent hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-plus mr-1"></i> Add more
+                    </button>
+                    <div class="flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('modal-add-ingredient')" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-mistGrey hover:text-white">Cancel</button>
+                    <button id="save-ingredient-details" type="submit" disabled class="px-5 py-2 rounded-xl text-xs font-bold bg-cyanAccent text-abyss hover:bg-cyan-300 disabled:opacity-40 disabled:cursor-not-allowed">Save Details</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Edit Exercise and Sets -->
+    <div id="modal-edit-exercise" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-slate-700 p-6 space-y-6">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-pen-to-square text-cyanAccent"></i> Edit Exercise
+                </h3>
+                <button type="button" onclick="closeModal('modal-edit-exercise')" class="text-mistGrey hover:text-white">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <form id="form-edit-exercise" onsubmit="handleEditExercise(event)" class="space-y-4">
+                <input type="hidden" id="edit-exercise-sec-id">
+                <input type="hidden" id="edit-exercise-id">
+                <div>
+                    <label for="edit-exercise-title" class="block text-xs font-semibold text-mistGrey uppercase mb-2">Exercise Name</label>
+                    <input type="text" id="edit-exercise-title" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyanAccent">
+                </div>
+                <div>
+                    <h4 class="text-xs font-semibold text-mistGrey uppercase mb-2">Set Details</h4>
+                    <div id="edit-exercise-sets" class="space-y-2"></div>
+                </div>
+                <div class="pt-4 flex justify-end gap-3 border-t border-slate-800">
+                    <button type="button" onclick="closeModal('modal-edit-exercise')" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-mistGrey hover:text-white">Cancel</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-cyanAccent text-abyss hover:bg-cyan-300">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Add Sub-Section -->
+    <div id="modal-add-section" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md rounded-2xl border border-slate-700 p-6 space-y-6">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-folder-plus text-cyanAccent"></i> Add New Sub-Section
+                </h3>
+                <button onclick="closeModal('modal-add-section')" class="text-mistGrey hover:text-white">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <form id="form-add-section" onsubmit="handleAddSection(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-mistGrey uppercase mb-2">Section Title</label>
+                    <input type="text" id="section-name" required placeholder="e.g., Warmup, Main Lifts, Dinner" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyanAccent">
+                </div>
+
+                <div class="pt-4 flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('modal-add-section')" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-mistGrey hover:text-white">Cancel</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-cyanAccent text-abyss hover:bg-cyan-300">Add Section</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Add Checkbox Item -->
+    <div id="modal-add-item" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md rounded-2xl border border-slate-700 p-6 space-y-6">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-cyanAccent"></i> Add Trackable Item
+                </h3>
+                <button onclick="closeModal('modal-add-item')" class="text-mistGrey hover:text-white">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <form id="form-add-item" onsubmit="handleAddItem(event)" class="space-y-4">
+                <input type="hidden" id="target-section-id">
+                
+                <div>
+                    <label class="block text-xs font-semibold text-mistGrey uppercase mb-2">Task Title</label>
+                    <input type="text" id="item-title" required placeholder="e.g., Bench Press, Grilled Chicken Bowl" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyanAccent">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-mistGrey uppercase mb-2">Metrics / Subtext (Optional)</label>
+                    <input type="text" id="item-metric" placeholder="e.g., 4 sets x 10 reps, 500 kcal | 45g Protein" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyanAccent">
+                </div>
+
+                <div class="pt-4 flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('modal-add-item')" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-mistGrey hover:text-white">Cancel</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-cyanAccent text-abyss hover:bg-cyan-300">Add Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Default initial application state with exercise headers and set child entries
+        const DEFAULT_DATA = [
+            {
+                id: 'gym-default',
+                title: 'GYM WORKOUT TRACKER',
+                icon: 'fa-dumbbell',
+                color: 'cyan',
+                sections: [
+                    {
+                        id: 'sec-1',
+                        title: 'CHEST DAY',
+                        exercises: [
+                            {
+                                id: 'ex-1',
+                                title: 'bench press',
+                                sets: [
+                                    { id: 'st-1', label: 'Set 1', weight: 80, reps: 12, checked: true },
+                                    { id: 'st-2', label: 'Set 2', weight: 80, reps: 10, checked: false },
+                                    { id: 'st-3', label: 'Set 3', weight: 85, reps: 8, checked: false },
+                                    { id: 'st-4', label: 'Set 4', weight: 90, reps: 6, checked: false }
+                                ]
+                            },
+                            {
+                                id: 'ex-2',
+                                title: 'Incline Dumbbell Press',
+                                sets: [
+                                    { id: 'st-5', label: 'Set 1', weight: 28, reps: 10, checked: false },
+                                    { id: 'st-6', label: 'Set 2', weight: 30, reps: 8, checked: false }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        id: 'sec-2',
+                        title: 'ARM & SHOULDER DAY',
+                        exercises: [
+                            {
+                                id: 'ex-3',
+                                title: 'Overhead Barbell Press',
+                                sets: [
+                                    { id: 'st-7', label: 'Set 1', weight: 50, reps: 8, checked: false },
+                                    { id: 'st-8', label: 'Set 2', weight: 55, reps: 6, checked: false }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'diet-default',
+                title: 'DIET & NUTRITION TRACKER',
+                icon: 'fa-utensils',
+                color: 'violet',
+                sections: [
+                    {
+                        id: 'sec-4',
+                        title: 'Breakfast & Morning',
+                        exercises: [
+                            {
+                                id: 'ex-4',
+                                title: 'Protein Shake',
+                                checked: true,
+                                ingredients: [
+                                    { id: 'ing-9', name: 'Banana', grams: 120, calories: 107, protein: 1.3, carbs: 27.4, fat: 0.4 },
+                                    { id: 'ing-10', name: 'Oats', grams: 40, calories: 152, protein: 5.2, carbs: 27.1, fat: 2.8 },
+                                    { id: 'ing-11', name: 'Peanut Butter', grams: 16, calories: 94, protein: 4, carbs: 3.2, fat: 8 }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        // Persistent App State
+        let appState = [];
+        let workoutLogs = [];
+        let activeCategoryId = null;
+        let ingredientEntryMode = 'append';
+        const DEFAULT_MEAL_GOALS = { calories: null, protein: null, carbs: null, fat: null };
+        let mealGoals = { ...DEFAULT_MEAL_GOALS };
+        const DEFAULT_USER_PROFILE = {
+            name: 'Alex Morgan',
+            gymName: '',
+            age: '',
+            heightCm: '',
+            currentWeight: '',
+            goal: '',
+            targetWeight: '',
+            waterGoalMl: 2500,
+            avatarData: ''
+        };
+        let userProfile = { ...DEFAULT_USER_PROFILE };
+        let dailyWater = { date: '', amountMl: 0 };
+        let workoutHistory = {};
+        let weightHistory = [];
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            loadUserData();
+            loadState();
+            syncWorkoutHistoryForToday();
+            renderDashboard();
+            updateOverallProgress();
+            renderWorkoutLogs();
+            document.addEventListener('click', event => {
+                const wrapper = document.getElementById('notification-bell-wrap');
+                if (wrapper && !wrapper.contains(event.target)) closeNotificationPanel();
+            });
+            document.addEventListener('keydown', event => {
+                if (event.key === 'Escape') closeNotificationPanel();
+                if (event.key === 'Enter') handleFormEnterKey(event);
+            });
+        });
+
+        function handleFormEnterKey(event) {
+            if (event.defaultPrevented || event.isComposing || event.shiftKey || event.ctrlKey || event.metaKey) return;
+            const currentField = event.target;
+            if (!(currentField instanceof HTMLElement) || !currentField.form) return;
+            if (currentField.matches('textarea, button, input[type="button"], input[type="submit"], input[type="reset"], input[type="checkbox"], input[type="radio"], input[type="file"], input[type="range"]')) return;
+            if (currentField.matches('select') && !currentField.value) return;
+
+            const fields = Array.from(currentField.form.querySelectorAll('input:not([type="hidden"]):not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="range"]), select'))
+                .filter(field => !field.disabled && field.getClientRects().length > 0);
+            const currentIndex = fields.indexOf(currentField);
+            if (currentIndex < 0) return;
+
+            event.preventDefault();
+            fields[currentIndex + 1]?.focus();
+        }
+
+        function getLocalDateKey(date = new Date()) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function loadUserData() {
+            try {
+                userProfile = { ...DEFAULT_USER_PROFILE, ...JSON.parse(localStorage.getItem('DEVTRAC_PRO_PROFILE_V1') || '{}') };
+            } catch (error) {
+                userProfile = { ...DEFAULT_USER_PROFILE };
+            }
+            delete userProfile.activityLevel;
+            try {
+                const storedWater = JSON.parse(localStorage.getItem('DEVTRAC_PRO_WATER_V1') || '{}');
+                const today = getLocalDateKey();
+                dailyWater = storedWater.date === today ? storedWater : { date: today, amountMl: 0 };
+            } catch (error) {
+                dailyWater = { date: getLocalDateKey(), amountMl: 0 };
+            }
+            try {
+                workoutHistory = JSON.parse(localStorage.getItem('DEVTRAC_PRO_WORKOUT_HISTORY_V1') || '{}');
+            } catch (error) {
+                workoutHistory = {};
+            }
+            try {
+                weightHistory = JSON.parse(localStorage.getItem('DEVTRAC_PRO_WEIGHT_HISTORY_V1') || '[]');
+                if (!Array.isArray(weightHistory)) weightHistory = [];
+            } catch (error) {
+                weightHistory = [];
+            }
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('DEVTRAC_PRO_DATA_V2');
+            if (saved) {
+                try {
+                    appState = JSON.parse(saved);
+                } catch (e) {
+                    appState = DEFAULT_DATA;
+                }
+            } else {
+                appState = DEFAULT_DATA;
+                saveState();
+            }
+
+            const savedLogs = localStorage.getItem('DEVTRAC_PRO_LOGS_V2');
+            if (savedLogs) {
+                try {
+                    workoutLogs = JSON.parse(savedLogs);
+                } catch(e) {
+                    workoutLogs = [];
+                }
+            } else {
+                workoutLogs = [
+                    { id: 'st-1', exercise: 'bench press', group: 'CHEST DAY', setLabel: 'Set 1', reps: 12, weight: 80 }
+                ];
+                saveWorkoutLogs();
+            }
+            const savedGoals = localStorage.getItem('DEVTRAC_PRO_MEAL_GOALS_V1');
+            if (savedGoals) {
+                try {
+                    mealGoals = { ...DEFAULT_MEAL_GOALS, ...JSON.parse(savedGoals) };
+                } catch (e) {
+                    mealGoals = { ...DEFAULT_MEAL_GOALS };
+                }
+            }
+            normalizeDietMeals();
+        }
+
+        function saveState() {
+            localStorage.setItem('DEVTRAC_PRO_DATA_V2', JSON.stringify(appState));
+            updateOverallProgress();
+            renderFitnessDashboard();
+        }
+
+        function saveWorkoutLogs() {
+            localStorage.setItem('DEVTRAC_PRO_LOGS_V2', JSON.stringify(workoutLogs));
+            renderWorkoutLogs();
+        }
+
+        function isDietCategory(category) {
+            const title = (category && category.title || '').toLowerCase();
+            return Boolean(category && (category.id === 'diet-default' || title.includes('diet') || title.includes('nutrition')));
+        }
+
+        function normalizeDietMeals() {
+            let changed = false;
+            appState.filter(isDietCategory).forEach(category => {
+                category.sections.forEach(section => {
+                    (section.exercises || []).forEach(meal => {
+                        if (!Array.isArray(meal.ingredients)) {
+                            const oldSets = Array.isArray(meal.sets) ? meal.sets : [];
+                            meal.ingredients = oldSets.map(set => ({
+                                id: set.id,
+                                name: set.label || 'Ingredient',
+                                grams: Number(set.weight) || 0,
+                                calories: null,
+                                protein: null,
+                                carbs: null,
+                                fat: null
+                            }));
+                            if (typeof meal.checked !== 'boolean') {
+                                meal.checked = oldSets.length > 0 && oldSets.every(set => set.checked);
+                            }
+                            delete meal.sets;
+                            changed = true;
+                        } else if (typeof meal.checked !== 'boolean') {
+                            meal.checked = false;
+                            changed = true;
+                        }
+                        meal.ingredients.forEach(ingredient => {
+                            ['calories', 'protein', 'carbs', 'fat'].forEach(metric => {
+                                if (ingredient[metric] === undefined || ingredient[metric] === '') {
+                                    ingredient[metric] = null;
+                                    changed = true;
+                                } else if (ingredient[metric] !== null) {
+                                    const value = Number(ingredient[metric]);
+                                    if (!Number.isFinite(value)) {
+                                        ingredient[metric] = null;
+                                        changed = true;
+                                    } else if (ingredient[metric] !== value) {
+                                        ingredient[metric] = value;
+                                        changed = true;
+                                    }
+                                }
+                            });
+                        });
+                    });
+                });
+            });
+            if (changed) saveState();
+        }
+
+        function countProgressItems(exercises, isDiet) {
+            let total = 0;
+            let checked = 0;
+            (exercises || []).forEach(exercise => {
+                if (isDiet) {
+                    total++;
+                    if (exercise.checked) checked++;
+                    return;
+                }
+                (exercise.sets || []).forEach(set => {
+                    total++;
+                    if (set.checked) checked++;
+                });
+            });
+            return { total, checked };
+        }
+
+        function getCategoryProgressCounts(category) {
+            return category.sections.reduce((counts, section) => {
+                const sectionCounts = countProgressItems(section.exercises, isDietCategory(category));
+                counts.total += sectionCounts.total;
+                counts.checked += sectionCounts.checked;
+                return counts;
+            }, { total: 0, checked: 0 });
+        }
+
+        function formatNutritionAmount(value) {
+            return Number(value || 0).toFixed(1).replace(/\.0$/, '');
+        }
+
+        function formatLitres(amountMl) {
+            return (Number(amountMl || 0) / 1000).toFixed(2).replace(/\.?0+$/, '');
+        }
+
+        const FOOD_NUTRITION_REFERENCES = [
+            { names: ['oats', 'rolled oats', 'porridge oats'], calories: 389, protein: 16.9, carbs: 66.3, fat: 6.9 },
+            { names: ['peanut', 'peanuts'], calories: 567, protein: 25.8, carbs: 16.1, fat: 49.2 },
+            { names: ['peanut butter'], calories: 588, protein: 25, carbs: 20, fat: 50 },
+            { names: ['rice', 'cooked rice', 'white rice'], calories: 130, protein: 2.7, carbs: 28.2, fat: 0.3 },
+            { names: ['egg', 'eggs'], calories: 143, protein: 12.6, carbs: 0.7, fat: 9.5 },
+            { names: ['banana'], calories: 89, protein: 1.1, carbs: 22.8, fat: 0.3 },
+            { names: ['apple'], calories: 52, protein: 0.3, carbs: 13.8, fat: 0.2 },
+            { names: ['milk', 'whole milk'], calories: 61, protein: 3.2, carbs: 4.8, fat: 3.3 },
+            { names: ['greek yogurt'], calories: 59, protein: 10.3, carbs: 3.6, fat: 0.4 },
+            { names: ['yogurt', 'yoghurt'], calories: 61, protein: 3.5, carbs: 4.7, fat: 3.3 },
+            { names: ['chicken breast', 'chicken'], calories: 165, protein: 31, carbs: 0, fat: 3.6 }
+        ];
+
+        function getIngredientNutrition(ingredient) {
+            const normalizedName = String(ingredient.name || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+            const profile = FOOD_NUTRITION_REFERENCES.find(food => food.names.some(name => normalizedName === name || normalizedName.endsWith(` ${name}`)));
+            const amountScale = (Number(ingredient.grams) || 0) / 100;
+            const nutrition = {};
+            const entered = {};
+
+            ['calories', 'protein', 'carbs', 'fat'].forEach(metric => {
+                const manualValue = ingredient[metric];
+                if (manualValue !== null && manualValue !== undefined && manualValue !== '' && Number.isFinite(Number(manualValue))) {
+                    nutrition[metric] = Number(manualValue);
+                    entered[metric] = true;
+                } else if (profile) {
+                    nutrition[metric] = profile[metric] * amountScale;
+                    entered[metric] = true;
+                } else {
+                    nutrition[metric] = 0;
+                    entered[metric] = false;
+                }
+            });
+            return { ...nutrition, entered };
+        }
+
+        function getMealNutrition(meal) {
+            const nutrition = { calories: 0, protein: 0, carbs: 0, fat: 0 };
+            const entered = { calories: false, protein: false, carbs: false, fat: false };
+            (meal.ingredients || []).forEach(ingredient => {
+                const ingredientNutrition = getIngredientNutrition(ingredient);
+                ['calories', 'protein', 'carbs', 'fat'].forEach(metric => {
+                    if (!ingredientNutrition.entered[metric]) return;
+                    nutrition[metric] += ingredientNutrition[metric];
+                    entered[metric] = true;
+                });
+            });
+            return { ...nutrition, entered };
+        }
+
+        function renderTodayMeals() {
+            const meals = [];
+            appState.filter(isDietCategory).forEach(category => {
+                category.sections.forEach(section => {
+                    (section.exercises || []).filter(meal => meal.checked).forEach(meal => {
+                        meals.push({ title: meal.title, section: section.title, ingredients: meal.ingredients || [], totals: getMealNutrition(meal) });
+                    });
+                });
+            });
+
+            const totals = meals.reduce((sum, meal) => {
+                ['calories', 'protein', 'carbs', 'fat'].forEach(metric => {
+                    sum[metric] += meal.totals[metric];
+                    sum.entered[metric] ||= meal.totals.entered[metric];
+                });
+                return sum;
+            }, { calories: 0, protein: 0, carbs: 0, fat: 0, entered: { calories: false, protein: false, carbs: false, fat: false } });
+
+            document.getElementById('today-meal-count').textContent = `${meals.length} ${meals.length === 1 ? 'meal' : 'meals'}`;
+            document.getElementById('today-meal-metrics').innerHTML = [
+                ['calories', 'Calories', 'kcal'],
+                ['protein', 'Protein', 'g'],
+                ['carbs', 'Carbs', 'g'],
+                ['fat', 'Fat', 'g']
+            ].map(([metric, label, unit]) => {
+                const goal = mealGoals[metric];
+                let comparison = '<span class="text-slate-500">Enter nutrient values</span>';
+                if (totals.entered[metric] && (goal === null || goal === '' || !Number.isFinite(Number(goal)))) {
+                    comparison = '<span class="text-slate-500">Set a goal</span>';
+                } else if (totals.entered[metric] && Number.isFinite(Number(goal))) {
+                    const difference = Number(goal) - totals[metric];
+                    if (Math.abs(difference) < 0.05) {
+                        comparison = '<span class="text-cyanAccent">Goal met</span>';
+                    } else if (difference < 0) {
+                        comparison = `<span class="font-semibold" style="color: #34d399">+${formatNutritionAmount(-difference)} ${unit} over goal</span>`;
+                    } else {
+                        comparison = `<span class="font-semibold" style="color: #f87171">+${formatNutritionAmount(difference)} ${unit} to goal</span>`;
+                    }
+                }
+                return `
+                    <div class="rounded-lg border border-slate-800 bg-slate-900/70 p-3">
+                        <p class="text-[10px] uppercase text-mistGrey">${label}</p>
+                        <p class="mt-1 text-lg font-bold text-white">${totals.entered[metric] ? `${formatNutritionAmount(totals[metric])} <span class="text-xs font-medium text-mistGrey">${unit}</span>` : '—'}</p>
+                        <p class="mt-1 text-[11px] font-semibold">${comparison}</p>
+                    </div>
+                `;
+            }).join('');
+
+            ['calories', 'protein', 'carbs', 'fat'].forEach(metric => {
+                const input = document.getElementById(`goal-${metric}`);
+                if (input && document.activeElement !== input) input.value = mealGoals[metric] ?? '';
+            });
+
+            document.getElementById('today-meal-tbody').innerHTML = meals.length ? meals.map(meal => `
+                <tr class="align-top hover:bg-slate-900/50">
+                    <td class="py-2.5 px-3 font-semibold text-white">${escapeHtml(meal.title)}<span class="block mt-1 text-[10px] text-mistGrey">${escapeHtml(meal.section)}</span></td>
+                    <td class="py-2.5 px-3 text-mistGrey">${meal.ingredients.map(ingredient => `${escapeHtml(ingredient.name)} (${formatNutritionAmount(ingredient.grams)} g)`).join('<br>')}</td>
+                    <td class="py-2.5 px-3 text-white">${meal.totals.entered.calories ? `${formatNutritionAmount(meal.totals.calories)} kcal` : '—'}</td>
+                    <td class="py-2.5 px-3 text-white">${meal.totals.entered.protein ? `${formatNutritionAmount(meal.totals.protein)} g` : '—'}</td>
+                    <td class="py-2.5 px-3 text-white">${meal.totals.entered.carbs ? `${formatNutritionAmount(meal.totals.carbs)} g` : '—'}</td>
+                    <td class="py-2.5 px-3 text-white">${meal.totals.entered.fat ? `${formatNutritionAmount(meal.totals.fat)} g` : '—'}</td>
+                </tr>
+            `).join('') : '<tr><td colspan="6" class="py-5 text-center italic text-mistGrey">Check a meal to add it to today’s totals.</td></tr>';
+            renderSavedMealGoals();
+        }
+
+        function renderSavedMealGoals() {
+            const labels = { calories: 'kcal', protein: 'g protein', carbs: 'g carbs', fat: 'g fat' };
+            const savedGoals = Object.entries(mealGoals)
+                .filter(([, value]) => value !== null && value !== '' && Number.isFinite(Number(value)))
+                .map(([metric, value]) => `${formatNutritionAmount(value)} ${labels[metric]}`);
+            document.getElementById('saved-meal-goals').textContent = savedGoals.length ? `Saved goals: ${savedGoals.join(' · ')}` : 'No daily goals saved yet';
+        }
+
+        let refreshAnimationTimeoutId = null;
+
+        function refreshTodayMeals(button) {
+            const refreshIcon = button ? button.querySelector('i') : document.getElementById('meal-refresh-icon');
+            if (refreshIcon) refreshIcon.classList.add('refresh-rotation');
+            window.clearTimeout(refreshAnimationTimeoutId);
+
+            const savedData = localStorage.getItem('DEVTRAC_PRO_DATA_V2');
+            if (savedData) {
+                try {
+                    appState = JSON.parse(savedData);
+                } catch (e) {
+                    // Keep the current in-memory state if stored data is invalid.
+                }
+            }
+            const savedGoals = localStorage.getItem('DEVTRAC_PRO_MEAL_GOALS_V1');
+            if (savedGoals) {
+                try {
+                    mealGoals = { ...DEFAULT_MEAL_GOALS, ...JSON.parse(savedGoals) };
+                } catch (e) {
+                    mealGoals = { ...DEFAULT_MEAL_GOALS };
+                }
+            }
+            normalizeDietMeals();
+            renderCategoryView();
+            refreshAnimationTimeoutId = window.setTimeout(() => {
+                if (refreshIcon) refreshIcon.classList.remove('refresh-rotation');
+            }, 700);
+        }
+
+        function saveMealGoals(event) {
+            event.preventDefault();
+            mealGoals = ['calories', 'protein', 'carbs', 'fat'].reduce((goals, metric) => {
+                const value = document.getElementById(`goal-${metric}`).value;
+                goals[metric] = value === '' ? null : Number(value);
+                return goals;
+            }, {});
+            localStorage.setItem('DEVTRAC_PRO_MEAL_GOALS_V1', JSON.stringify(mealGoals));
+            renderTodayMeals();
+            renderFitnessDashboard();
+            showToast('Daily goals saved');
+        }
+
+        let toastTimeoutId = null;
+        let notificationAnimationTimeoutId = null;
+
+        function animateNotificationBell(button) {
+            const bell = button.querySelector('i');
+            bell.classList.remove('bell-shake');
+            void bell.offsetWidth;
+            bell.classList.add('bell-shake');
+            window.clearTimeout(notificationAnimationTimeoutId);
+            notificationAnimationTimeoutId = window.setTimeout(() => bell.classList.remove('bell-shake'), 650);
+            toggleNotificationPanel(button);
+        }
+
+        function toggleNotificationPanel(button) {
+            const panel = document.getElementById('notification-panel');
+            const isOpening = panel.classList.contains('hidden');
+            if (isOpening) {
+                renderNotificationPanel();
+                panel.classList.remove('hidden');
+                button.setAttribute('aria-expanded', 'true');
+            } else {
+                closeNotificationPanel();
+            }
+        }
+
+        function closeNotificationPanel() {
+            const panel = document.getElementById('notification-panel');
+            const button = document.querySelector('#notification-bell-wrap > button');
+            if (!panel) return;
+            panel.classList.add('hidden');
+            if (button) button.setAttribute('aria-expanded', 'false');
+        }
+
+        function openNotificationCategory(categoryId) {
+            closeNotificationPanel();
+            openCategory(categoryId);
+        }
+
+        function renderNotificationPanel() {
+            const notifications = [];
+            const gymCategory = appState.find(category => !isDietCategory(category));
+            if (workoutLogs.length) {
+                const latestLog = workoutLogs[0];
+                notifications.push({
+                    icon: 'fa-dumbbell',
+                    tone: 'text-cyanAccent',
+                    title: `${workoutLogs.length} workout ${workoutLogs.length === 1 ? 'set' : 'sets'} logged today`,
+                    detail: latestLog.exercise ? `Latest: ${latestLog.exercise}` : 'Your workout log has new activity.',
+                    category: gymCategory,
+                    action: 'View workout'
+                });
+            }
+
+            const dietCategory = appState.find(isDietCategory);
+            const checkedMeals = [];
+            if (dietCategory) {
+                dietCategory.sections.forEach(section => {
+                    (section.exercises || []).filter(meal => meal.checked).forEach(meal => {
+                        checkedMeals.push({ meal, section });
+                    });
+                });
+                if (checkedMeals.length) {
+                    notifications.push({
+                        icon: 'fa-utensils',
+                        tone: 'text-violet-300',
+                        title: `${checkedMeals.length} meal${checkedMeals.length === 1 ? '' : 's'} checked today`,
+                        detail: checkedMeals.map(entry => entry.meal.title).join(', '),
+                        category: dietCategory,
+                        action: 'View meals'
+                    });
+                }
+            }
+
+            if (dietCategory && checkedMeals.length) {
+                const totals = checkedMeals.reduce((sum, entry) => {
+                    const mealNutrition = getMealNutrition(entry.meal);
+                    ['calories', 'protein', 'carbs', 'fat'].forEach(metric => {
+                        sum[metric] += mealNutrition[metric];
+                        sum.entered[metric] ||= mealNutrition.entered[metric];
+                    });
+                    return sum;
+                }, { calories: 0, protein: 0, carbs: 0, fat: 0, entered: { calories: false, protein: false, carbs: false, fat: false } });
+
+                const units = { calories: 'kcal', protein: 'g', carbs: 'g', fat: 'g' };
+                Object.entries(mealGoals).forEach(([metric, goal]) => {
+                    if (!totals.entered[metric] || goal === null || goal === '' || !Number.isFinite(Number(goal))) return;
+                    const difference = totals[metric] - Number(goal);
+                    if (Math.abs(difference) < 0.05) {
+                        notifications.push({ icon: 'fa-bullseye', tone: 'text-cyanAccent', title: `${metric} goal reached`, detail: `${formatNutritionAmount(totals[metric])} ${units[metric]} consumed.` });
+                    } else if (difference > 0) {
+                        notifications.push({ icon: 'fa-arrow-trend-up', tone: 'text-emerald-400', title: `${metric} goal exceeded`, detail: `${formatNutritionAmount(difference)} ${units[metric]} over today's goal.` });
+                    } else {
+                        notifications.push({ icon: 'fa-bullseye', tone: 'text-red-400', title: `${metric} goal not reached`, detail: `${formatNutritionAmount(-difference)} ${units[metric]} remaining to goal.` });
+                    }
+                });
+            }
+
+            const list = document.getElementById('notification-list');
+            list.innerHTML = notifications.length ? notifications.map(notification => `
+                <article class="flex gap-3 border-b border-slate-800/80 px-4 py-3 last:border-b-0">
+                    <span class="mt-0.5 ${notification.tone}"><i class="fa-solid ${notification.icon}"></i></span>
+                    <div class="min-w-0 flex-1">
+                        <h3 class="text-xs font-semibold text-white">${escapeHtml(notification.title)}</h3>
+                        <p class="mt-1 break-words text-[11px] text-mistGrey">${escapeHtml(notification.detail)}</p>
+                        ${notification.category ? `<button type="button" onclick="openNotificationCategory('${notification.category.id}')" class="mt-2 text-[10px] font-bold text-cyanAccent hover:text-cyan-200">${notification.action} <i class="fa-solid fa-arrow-right ml-1"></i></button>` : ''}
+                    </div>
+                </article>
+            `).join('') : `
+                <div class="px-5 py-8 text-center">
+                    <i class="fa-regular fa-bell-slash text-2xl text-slate-600"></i>
+                    <p class="mt-3 text-xs font-semibold text-white">You're all caught up</p>
+                    <p class="mt-1 text-[11px] text-mistGrey">Workout logs, checked meals, and goal updates will appear here.</p>
+                </div>
+            `;
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('app-toast');
+            toast.textContent = message;
+            toast.classList.remove('hidden');
+            window.clearTimeout(toastTimeoutId);
+            toastTimeoutId = window.setTimeout(() => toast.classList.add('hidden'), 2500);
+        }
+
+        // View Navigation
+        function switchView(viewName) {
+            const dash = document.getElementById('dashboard-view');
+            const catView = document.getElementById('category-view');
+
+            if (viewName === 'dashboard') {
+                dash.classList.remove('hidden');
+                catView.classList.add('hidden');
+                activeCategoryId = null;
+                renderDashboard();
+            } else if (viewName === 'category') {
+                dash.classList.add('hidden');
+                catView.classList.remove('hidden');
+                renderCategoryView();
+            }
+        }
+
+        // Calculate overall progress across sets and meals
+        function updateOverallProgress() {
+            const totals = appState.reduce((counts, category) => {
+                const categoryCounts = getCategoryProgressCounts(category);
+                counts.total += categoryCounts.total;
+                counts.checked += categoryCounts.checked;
+                return counts;
+            }, { total: 0, checked: 0 });
+
+            const percent = totals.total === 0 ? 0 : Math.round((totals.checked / totals.total) * 100);
+            
+            document.getElementById('overall-percentage').textContent = `${percent}%`;
+            document.getElementById('overall-progress-bar').style.width = `${percent}%`;
+        }
+
+        // Render Dashboard View
+        function renderDashboard() {
+            const container = document.getElementById('modules-container');
+            document.getElementById('module-count').textContent = `${appState.length} Modules`;
+
+            container.innerHTML = appState.map(cat => {
+                const isDiet = isDietCategory(cat);
+                const counts = getCategoryProgressCounts(cat);
+                const percent = counts.total === 0 ? 0 : Math.round((counts.checked / counts.total) * 100);
+                const dashOffset = 220 - (220 * percent) / 100;
+                const isCyan = cat.color === 'cyan';
+
+                return `
+                    <div onclick="openCategory('${cat.id}')" class="glass-panel glass-panel-hover rounded-2xl p-6 cursor-pointer transition-all duration-300 flex flex-col justify-between group">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-12 h-12 rounded-xl flex items-center justify-center ${isCyan ? 'bg-cyanAccent/10 text-cyanAccent border border-cyanAccent/30' : 'bg-violetAccent/20 text-violet-300 border border-violetAccent/40'} text-xl">
+                                    <i class="fa-solid ${cat.icon}"></i>
+                                </div>
+                                <div class="relative w-16 h-16 flex items-center justify-center">
+                                    <svg class="w-full h-full transform -rotate-90" viewBox="0 0 80 80">
+                                        <circle class="circle-bg" cx="40" cy="40" r="35" stroke-width="7"></circle>
+                                        <circle class="circle-progress" cx="40" cy="40" r="35" stroke-width="7"
+                                            stroke="${isCyan ? '#00F5D4' : '#7B2CBF'}"
+                                            stroke-dasharray="220"
+                                            stroke-dashoffset="${dashOffset}">
+                                        </circle>
+                                    </svg>
+                                    <span class="absolute text-xs font-bold ${isCyan ? 'text-cyanAccent' : 'text-violet-300'}">${percent}%</span>
+                                </div>
+                            </div>
+                            <h4 class="text-lg font-bold text-white group-hover:text-cyanAccent transition mb-1">${cat.title}</h4>
+                            <p class="text-xs text-mistGrey">${cat.sections.length} Sub-sections • ${counts.total} Total ${isDiet ? 'Meals' : 'Sets'}</p>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold ${isCyan ? 'text-cyanAccent' : 'text-violet-400'}">
+                            <span>Open Tracker</span>
+                            <i class="fa-solid fa-chevron-right group-hover:translate-x-1 transition"></i>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            renderFitnessDashboard();
+        }
+
+        function getCheckedWorkoutSets() {
+            const checkedSets = [];
+            appState.filter(category => !isDietCategory(category)).forEach(category => {
+                category.sections.forEach(section => {
+                    (section.exercises || []).forEach(exercise => {
+                        (exercise.sets || []).filter(set => set.checked).forEach(set => {
+                            checkedSets.push({
+                                exercise: exercise.title,
+                                section: section.title,
+                                weight: Number(set.weight) || 0,
+                                reps: Number(set.reps) || 0,
+                                label: set.label || 'Set'
+                            });
+                        });
+                    });
+                });
+            });
+            return checkedSets;
+        }
+
+        function getCheckedNutritionTotals() {
+            const totals = { calories: 0, protein: 0, entered: { calories: false, protein: false } };
+            appState.filter(isDietCategory).forEach(category => {
+                category.sections.forEach(section => {
+                    (section.exercises || []).filter(meal => meal.checked).forEach(meal => {
+                        const nutrition = getMealNutrition(meal);
+                        ['calories', 'protein'].forEach(metric => {
+                            if (!nutrition.entered[metric]) return;
+                            totals[metric] += nutrition[metric];
+                            totals.entered[metric] = true;
+                        });
+                    });
+                });
+            });
+            return totals;
+        }
+
+        function setProgressBar(id, value, goal) {
+            const bar = document.getElementById(id);
+            const percent = Number(goal) > 0 ? Math.min(100, Math.max(0, Number(value) / Number(goal) * 100)) : 0;
+            bar.style.width = `${percent}%`;
+        }
+
+        function renderFitnessDashboard() {
+            if (!document.getElementById('fitness-overview')) return;
+            updateProfileHeader();
+            document.getElementById('dashboard-gym-name').textContent = userProfile.gymName || 'Gym not set';
+            const today = getLocalDateKey();
+            if (dailyWater.date !== today) {
+                dailyWater = { date: today, amountMl: 0 };
+                localStorage.setItem('DEVTRAC_PRO_WATER_V1', JSON.stringify(dailyWater));
+            }
+
+            const currentWeight = Number(userProfile.currentWeight) || 0;
+            const targetWeight = Number(userProfile.targetWeight) || 0;
+            document.getElementById('dashboard-current-weight').textContent = currentWeight ? `${formatNutritionAmount(currentWeight)} kg` : '--';
+            document.getElementById('dashboard-target-weight').textContent = targetWeight ? `${formatNutritionAmount(targetWeight)} kg` : '--';
+            document.getElementById('dashboard-weight-note').textContent = currentWeight && targetWeight
+                ? `${formatNutritionAmount(Math.abs(targetWeight - currentWeight))} kg ${targetWeight > currentWeight ? 'to gain' : targetWeight < currentWeight ? 'to lose' : 'at target'}`
+                : 'Add your current and target weight.';
+
+            const nutrition = getCheckedNutritionTotals();
+            const caloriesGoal = Number(mealGoals.calories) || 0;
+            const proteinGoal = Number(mealGoals.protein) || 0;
+            document.getElementById('dashboard-calories').textContent = nutrition.entered.calories ? formatNutritionAmount(nutrition.calories) : '--';
+            document.getElementById('dashboard-calories-goal').textContent = caloriesGoal ? formatNutritionAmount(caloriesGoal) : '--';
+            const caloriesNote = document.getElementById('dashboard-calories-note');
+            const proteinNote = document.getElementById('dashboard-protein-note');
+            const setDashboardGoalNote = (element, consumed, goal, unit, hasData) => {
+                element.style.color = '';
+                if (!hasData) {
+                    element.textContent = 'Add nutrition details to checked meals.';
+                } else if (!goal) {
+                    element.textContent = 'Set a target in Diet & Nutrition.';
+                } else {
+                    const difference = goal - consumed;
+                    if (Math.abs(difference) < 0.05) {
+                        element.textContent = 'Daily target reached';
+                        element.style.color = '#00F5D4';
+                    } else if (difference < 0) {
+                        element.textContent = `+${formatNutritionAmount(-difference)} ${unit} over target`;
+                        element.style.color = '#34d399';
+                    } else {
+                        element.textContent = `${formatNutritionAmount(difference)} ${unit} to target`;
+                        element.style.color = '#f87171';
+                    }
+                }
+            };
+            setDashboardGoalNote(caloriesNote, nutrition.calories, caloriesGoal, 'kcal', nutrition.entered.calories);
+            document.getElementById('dashboard-protein').textContent = nutrition.entered.protein ? formatNutritionAmount(nutrition.protein) : '--';
+            document.getElementById('dashboard-protein-goal').textContent = proteinGoal ? formatNutritionAmount(proteinGoal) : '--';
+            setDashboardGoalNote(proteinNote, nutrition.protein, proteinGoal, 'g', nutrition.entered.protein);
+            setProgressBar('dashboard-calories-bar', nutrition.calories, caloriesGoal);
+            setProgressBar('dashboard-protein-bar', nutrition.protein, proteinGoal);
+
+            const waterGoal = Number(userProfile.waterGoalMl) || 2500;
+            document.getElementById('dashboard-water').textContent = formatLitres(dailyWater.amountMl);
+            document.getElementById('dashboard-water-goal').textContent = formatLitres(waterGoal);
+            setProgressBar('dashboard-water-bar', dailyWater.amountMl || 0, waterGoal);
+
+            const checkedSets = getCheckedWorkoutSets();
+            document.getElementById('dashboard-workout-count').textContent = `${checkedSets.length} ${checkedSets.length === 1 ? 'set' : 'sets'}`;
+            document.getElementById('dashboard-today-workout').innerHTML = checkedSets.length ? checkedSets.map(set => `
+                <div class="flex items-center justify-between gap-3 border-b border-slate-800/70 pb-2 last:border-0">
+                    <div class="min-w-0"><p class="truncate text-xs font-semibold text-white">${escapeHtml(set.exercise)}</p><p class="text-[10px] text-mistGrey">${escapeHtml(set.section)} · ${escapeHtml(set.label)}</p></div>
+                    <span class="shrink-0 text-xs font-bold text-cyanAccent">${formatNutritionAmount(set.weight)} kg × ${set.reps}</span>
+                </div>
+            `).join('') : '<p class="py-3 text-xs italic text-mistGrey">Check completed sets in your gym tracker to see today\'s workout.</p>';
+
+            renderWeeklyWorkoutChart();
+            renderWeightProgressChart();
+        }
+
+        function renderWeeklyWorkoutChart() {
+            const today = new Date();
+            const days = Array.from({ length: 7 }, (_, index) => {
+                const date = new Date(today);
+                date.setDate(today.getDate() - (6 - index));
+                const key = getLocalDateKey(date);
+                return { key, label: new Intl.DateTimeFormat('en', { weekday: 'short' }).format(date), count: Number(workoutHistory[key]) || 0 };
+            });
+            const maxCount = Math.max(1, ...days.map(day => day.count));
+            const completedDays = days.filter(day => day.count > 0).length;
+            document.getElementById('dashboard-weekly-days').textContent = `${completedDays} / 7 days`;
+            document.getElementById('dashboard-weekly-chart').innerHTML = `
+                <div class="grid grid-cols-7 items-end gap-2 h-28" role="img" aria-label="Checked gym sets during the last seven days">
+                    ${days.map(day => {
+                        const height = day.count ? Math.max(10, day.count / maxCount * 100) : 3;
+                        return `<div class="h-full flex flex-col items-center justify-end gap-1" title="${day.key}: ${day.count} checked sets"><span class="text-[9px] text-mistGrey">${day.count || ''}</span><div class="w-full max-w-8 rounded-t bg-cyanAccent/80" style="height:${height}%"></div><span class="text-[9px] text-mistGrey">${day.label}</span></div>`;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function renderWeightProgressChart() {
+            const chart = document.getElementById('dashboard-weight-chart');
+            const today = new Date();
+            const week = Array.from({ length: 7 }, (_, index) => {
+                const date = new Date(today);
+                date.setDate(today.getDate() - (6 - index));
+                return { date, key: getLocalDateKey(date) };
+            });
+            const weightsByDate = new Map(weightHistory.map(point => [point.date, Number(point.weight)]));
+            const points = week.map((day, index) => ({
+                date: day.key,
+                label: new Intl.DateTimeFormat('en', { weekday: 'short' }).format(day.date),
+                weight: weightsByDate.get(day.key),
+                dayIndex: index
+            })).filter(point => Number.isFinite(point.weight));
+            const target = Number(userProfile.targetWeight) || 0;
+            if (!points.length) {
+                document.getElementById('dashboard-progress-note').textContent = 'Log weigh-ins during the week to compare your progress.';
+                chart.innerHTML = `
+                    <svg viewBox="0 0 600 150" class="h-full w-full" role="img" aria-label="Weekly weight chart with no weigh-ins yet">
+                        ${[24, 48, 72, 96, 120].map(y => `<line x1="44" y1="${y}" x2="580" y2="${y}" stroke="#334155" stroke-width="1" stroke-dasharray="3 5" />`).join('')}
+                        ${week.map((day, index) => {
+                            const x = 44 + index * (536 / 6);
+                            return `<line x1="${x}" y1="20" x2="${x}" y2="124" stroke="#1e293b" stroke-width="1" /><text x="${x}" y="145" fill="#94A3B8" font-size="9" text-anchor="middle">${new Intl.DateTimeFormat('en', { weekday: 'short' }).format(day.date)}</text>`;
+                        }).join('')}
+                    </svg>
+                `;
+                return;
+            }
+
+            const values = points.map(point => Number(point.weight)).filter(Number.isFinite);
+            if (target) values.push(target);
+            const minimum = Math.min(...values) - Math.max(1, (Math.max(...values) - Math.min(...values)) * 0.15);
+            const maximum = Math.max(...values) + Math.max(1, (Math.max(...values) - Math.min(...values)) * 0.15);
+            const range = Math.max(1, maximum - minimum);
+            const coordinates = points.map((point, index) => ({
+                x: 44 + point.dayIndex * (536 / 6),
+                y: 120 - ((point.weight - minimum) / range) * 88,
+                weight: Number(point.weight),
+                date: point.date,
+                label: point.label
+            }));
+            const linePath = coordinates.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ');
+            const areaPath = `${linePath} L ${coordinates[coordinates.length - 1].x} 120 L ${coordinates[0].x} 120 Z`;
+            const targetY = target ? 120 - ((target - minimum) / range) * 88 : null;
+            const previousPoint = coordinates[0];
+            const latestPoint = coordinates[coordinates.length - 1];
+            if (coordinates.length > 1) {
+                const weeklyChange = latestPoint.weight - previousPoint.weight;
+                const direction = weeklyChange > 0 ? 'gained' : weeklyChange < 0 ? 'lost' : 'held steady';
+                const changeText = weeklyChange === 0 ? 'no change' : `${direction} ${formatNutritionAmount(Math.abs(weeklyChange))} kg`;
+                document.getElementById('dashboard-progress-note').textContent = `${formatNutritionAmount(previousPoint.weight)} kg → ${formatNutritionAmount(latestPoint.weight)} kg this week · ${changeText}`;
+            } else {
+                document.getElementById('dashboard-progress-note').textContent = `${formatNutritionAmount(latestPoint.weight)} kg · add another weigh-in this week to compare.`;
+            }
+            chart.innerHTML = `
+                <svg viewBox="0 0 600 150" class="h-full w-full" role="img" aria-label="Weekly body weight mountain chart${target ? ` compared with ${formatNutritionAmount(target)} kilogram target` : ''}">
+                    <defs>
+                        <linearGradient id="weight-area-gradient" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#00F5D4" stop-opacity="0.35" /><stop offset="100%" stop-color="#00F5D4" stop-opacity="0.02" /></linearGradient>
+                    </defs>
+                    ${[24, 48, 72, 96, 120].map(y => `<line x1="44" y1="${y}" x2="580" y2="${y}" stroke="#334155" stroke-width="1" stroke-dasharray="3 5" />`).join('')}
+                    ${week.map((day, index) => {
+                        const x = 44 + index * (536 / 6);
+                        return `<line x1="${x}" y1="20" x2="${x}" y2="120" stroke="#1e293b" stroke-width="1" /><text x="${x}" y="145" fill="#94A3B8" font-size="9" text-anchor="middle">${new Intl.DateTimeFormat('en', { weekday: 'short' }).format(day.date)}</text>`;
+                    }).join('')}
+                    ${targetY === null ? '' : `<line x1="44" y1="${targetY}" x2="580" y2="${targetY}" stroke="#D4B873" stroke-width="1.5" stroke-dasharray="5 5" /><text x="576" y="${Math.max(12, targetY - 5)}" fill="#D4B873" font-size="9" text-anchor="end">Target ${formatNutritionAmount(target)} kg</text>`}
+                    <path d="${areaPath}" fill="url(#weight-area-gradient)" />
+                    ${coordinates.length > 1 ? `<path d="${linePath}" fill="none" stroke="#00F5D4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />` : ''}
+                    ${coordinates.map(point => `<circle cx="${point.x}" cy="${point.y}" r="4" fill="#00F5D4" stroke="#08090A" stroke-width="2"><title>${point.date}: ${formatNutritionAmount(point.weight)} kg</title></circle>`).join('')}
+                </svg>
+            `;
+        }
+
+        function updateProfileHeader() {
+            document.getElementById('profile-name').textContent = userProfile.name || 'Your Profile';
+            const avatar = document.getElementById('profile-avatar');
+            avatar.src = userProfile.avatarData || 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=96&h=96&q=80';
+            avatar.alt = userProfile.name ? `${userProfile.name} profile photo` : 'Profile photo';
+        }
+
+        function openProfileModal() {
+            const fields = {
+                'profile-name-input': userProfile.name,
+                'profile-gym-name-input': userProfile.gymName,
+                'profile-age-input': userProfile.age,
+                'profile-height-input': userProfile.heightCm,
+                'profile-current-weight-input': userProfile.currentWeight,
+                'profile-goal-input': userProfile.goal,
+                'profile-target-weight-input': userProfile.targetWeight,
+                'profile-water-goal-input': formatLitres(userProfile.waterGoalMl) || 2.5
+            };
+            Object.entries(fields).forEach(([id, value]) => {
+                const input = document.getElementById(id);
+                if (input) input.value = value ?? '';
+            });
+            document.getElementById('profile-photo-preview').src = userProfile.avatarData || document.getElementById('profile-avatar').src;
+            document.getElementById('profile-photo-input').value = '';
+            document.getElementById('modal-profile').classList.remove('hidden');
+        }
+
+        function openProfileView() {
+            document.getElementById('profile-view-photo').src = userProfile.avatarData || document.getElementById('profile-avatar').src;
+            document.getElementById('profile-view-name').textContent = userProfile.name || 'Your Profile';
+            document.getElementById('profile-view-gym').textContent = userProfile.gymName || 'Gym not set';
+            document.getElementById('profile-view-age').textContent = userProfile.age ? `${userProfile.age} years` : 'Not set';
+            document.getElementById('profile-view-height').textContent = userProfile.heightCm ? `${formatNutritionAmount(userProfile.heightCm)} cm` : 'Not set';
+            document.getElementById('profile-view-current-weight').textContent = userProfile.currentWeight ? `${formatNutritionAmount(userProfile.currentWeight)} kg` : 'Not set';
+            document.getElementById('profile-view-target-weight').textContent = userProfile.targetWeight ? `${formatNutritionAmount(userProfile.targetWeight)} kg` : 'Not set';
+            document.getElementById('profile-view-goal').textContent = userProfile.goal || 'Not set';
+            document.getElementById('profile-view-water-goal').textContent = `${formatLitres(userProfile.waterGoalMl) || 2.5} L`;
+            document.getElementById('modal-profile-view').classList.remove('hidden');
+        }
+
+        function previewProfilePhoto(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+                showToast('Choose an image file');
+                return;
+            }
+            document.getElementById('profile-photo-preview').src = URL.createObjectURL(file);
+        }
+
+        function compressProfilePhoto(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onerror = reject;
+                reader.onload = () => {
+                    const image = new Image();
+                    image.onerror = reject;
+                    image.onload = () => {
+                        const scale = Math.min(1, 320 / Math.max(image.naturalWidth, image.naturalHeight));
+                        const canvas = document.createElement('canvas');
+                        canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+                        canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+                        canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
+                        resolve(canvas.toDataURL('image/jpeg', 0.78));
+                    };
+                    image.src = reader.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function saveUserProfile(event) {
+            event.preventDefault();
+            const photoFile = document.getElementById('profile-photo-input').files[0];
+            try {
+                if (photoFile) userProfile.avatarData = await compressProfilePhoto(photoFile);
+                userProfile = {
+                    ...userProfile,
+                    name: document.getElementById('profile-name-input').value.trim(),
+                    gymName: document.getElementById('profile-gym-name-input').value.trim(),
+                    age: document.getElementById('profile-age-input').value,
+                    heightCm: document.getElementById('profile-height-input').value,
+                    currentWeight: document.getElementById('profile-current-weight-input').value,
+                    goal: document.getElementById('profile-goal-input').value,
+                    targetWeight: document.getElementById('profile-target-weight-input').value,
+                    waterGoalMl: (Number(document.getElementById('profile-water-goal-input').value) || 2.5) * 1000
+                };
+                localStorage.setItem('DEVTRAC_PRO_PROFILE_V1', JSON.stringify(userProfile));
+                if (Number(userProfile.currentWeight) > 0) saveWeightPoint(Number(userProfile.currentWeight));
+                updateProfileHeader();
+                renderFitnessDashboard();
+                closeModal('modal-profile');
+                showToast('Profile saved');
+            } catch (error) {
+                showToast('Could not save profile photo. Try a smaller image.');
+            }
+        }
+
+        function saveWeightPoint(weight) {
+            const today = getLocalDateKey();
+            const existing = weightHistory.find(point => point.date === today);
+            if (existing) existing.weight = weight;
+            else weightHistory.push({ date: today, weight });
+            weightHistory.sort((a, b) => a.date.localeCompare(b.date));
+            localStorage.setItem('DEVTRAC_PRO_WEIGHT_HISTORY_V1', JSON.stringify(weightHistory));
+        }
+
+        function logWeightProgress() {
+            const weight = Number(document.getElementById('weigh-in-input').value);
+            if (!Number.isFinite(weight) || weight <= 0) return;
+            userProfile.currentWeight = weight;
+            localStorage.setItem('DEVTRAC_PRO_PROFILE_V1', JSON.stringify(userProfile));
+            saveWeightPoint(weight);
+            document.getElementById('weigh-in-input').value = '';
+            updateProfileHeader();
+            renderFitnessDashboard();
+            showToast('Weigh-in saved');
+        }
+
+        function saveDailyWater() {
+            dailyWater.date = getLocalDateKey();
+            localStorage.setItem('DEVTRAC_PRO_WATER_V1', JSON.stringify(dailyWater));
+            renderFitnessDashboard();
+        }
+
+        function addWaterIntake(amountMl) {
+            if (!Number.isFinite(amountMl) || amountMl <= 0) return;
+            if (dailyWater.date !== getLocalDateKey()) dailyWater = { date: getLocalDateKey(), amountMl: 0 };
+            dailyWater.amountMl = (Number(dailyWater.amountMl) || 0) + amountMl;
+            saveDailyWater();
+        }
+
+        function addCustomWaterIntake() {
+            const amountLitres = Number(document.getElementById('custom-water-amount').value);
+            if (!Number.isFinite(amountLitres) || amountLitres <= 0) return;
+            addWaterIntake(amountLitres * 1000);
+            document.getElementById('custom-water-amount').value = '';
+        }
+
+        function resetWaterIntake() {
+            dailyWater = { date: getLocalDateKey(), amountMl: 0 };
+            saveDailyWater();
+            showToast("Today's water intake reset");
+        }
+
+        function syncWorkoutHistoryForToday() {
+            workoutHistory[getLocalDateKey()] = getCheckedWorkoutSets().length;
+            localStorage.setItem('DEVTRAC_PRO_WORKOUT_HISTORY_V1', JSON.stringify(workoutHistory));
+        }
+
+        function recordWorkoutHistoryForToday() {
+            syncWorkoutHistoryForToday();
+            renderFitnessDashboard();
+        }
+
+        function openCategory(catId) {
+            activeCategoryId = catId;
+            switchView('category');
+        }
+
+        function renderMealCard(section, meal) {
+            const ingredients = Array.isArray(meal.ingredients) ? meal.ingredients : [];
+            const ingredientDetails = ingredients.map(ingredient => {
+                const nutrition = getIngredientNutrition(ingredient);
+                const nutrients = [
+                    ['calories', 'kcal'],
+                    ['protein', 'g protein'],
+                    ['carbs', 'g carbs'],
+                    ['fat', 'g fat']
+                ].filter(([metric]) => nutrition.entered[metric])
+                    .map(([metric, unit]) => `${formatNutritionAmount(nutrition[metric])} ${unit}`);
+                return `
+                    <div class="flex flex-wrap items-baseline gap-x-2 text-[11px] text-mistGrey">
+                        <span class="font-semibold text-slate-200">${escapeHtml(ingredient.name || 'Ingredient')}</span>
+                        <span>${formatNutritionAmount(ingredient.grams)} g</span>
+                        ${nutrients.map(value => `<span>${value}</span>`).join('')}
+                    </div>
+                `;
+            }).join('') || '<p class="text-[11px] italic text-slate-500">No meal details added</p>';
+
+            return `
+                <div class="glass-panel w-full self-start p-4 rounded-xl border border-slate-800/80 bg-slate-900/40" style="width: 100%; box-sizing: border-box;">
+                    <div class="flex flex-col">
+                        <div class="flex shrink-0 flex-wrap items-start justify-between gap-3">
+                            <div class="flex min-w-0 items-start gap-3">
+                                <input type="checkbox" ${meal.checked ? 'checked' : ''} onchange="toggleMealCheck('${section.id}', '${meal.id}')" class="cyber-checkbox" aria-label="Mark ${escapeHtml(meal.title)} complete">
+                                <div class="min-w-0">
+                                    <h4 class="text-sm font-black text-white tracking-wide uppercase">${escapeHtml(meal.title)}</h4>
+                                </div>
+                            </div>
+                            <div class="flex shrink-0 items-center gap-2">
+                                <button onclick="openEditMealDetailsModal('${section.id}', '${meal.id}')" class="px-2 py-1 rounded-md text-[11px] font-bold bg-slate-800 border border-slate-700 text-mistGrey hover:text-white transition" aria-label="Edit ${escapeHtml(meal.title)} details" title="Edit meal details">
+                                    <i class="fa-solid fa-pen text-[9px]"></i>
+                                </button>
+                                <button onclick="openAddSetModal('${section.id}', '${meal.id}')" class="px-2 py-1 rounded-md text-[11px] font-bold bg-cyanAccent/10 border border-cyanAccent/30 text-cyanAccent hover:bg-cyanAccent/20 transition flex items-center gap-1">
+                                    <i class="fa-solid fa-plus text-[9px]"></i> Add Meal
+                                </button>
+                                <button onclick="deleteExercise('${section.id}', '${meal.id}')" class="text-slate-600 hover:text-red-400 text-xs transition px-1" aria-label="Delete meal">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mt-2 ml-7 flex flex-col items-start gap-1.5">${ingredientDetails}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render Active Category
+        function renderCategoryView() {
+            const cat = appState.find(c => c.id === activeCategoryId);
+            if (!cat) return switchView('dashboard');
+            const isDiet = isDietCategory(cat);
+
+            document.getElementById('quick-log-button').classList.toggle('hidden', isDiet);
+            document.getElementById('workout-log-section').classList.toggle('hidden', isDiet);
+            document.getElementById('today-meal-section').classList.toggle('hidden', !isDiet);
+            renderTodayMeals();
+
+            const titleSec = document.getElementById('active-category-title-section');
+            titleSec.innerHTML = `
+                <div class="w-9 h-9 rounded-lg bg-cyanAccent/10 text-cyanAccent border border-cyanAccent/30 flex items-center justify-center">
+                    <i class="fa-solid ${cat.icon}"></i>
+                </div>
+                <div>
+                    <h2 class="text-lg font-extrabold text-white">${cat.title}</h2>
+                    <p class="text-[11px] text-mistGrey">${cat.sections.length} Sub-sections</p>
+                </div>
+            `;
+
+            const container = document.getElementById('sections-container');
+            if (cat.sections.length === 0) {
+                container.innerHTML = `
+                    <div class="glass-panel rounded-2xl p-8 text-center text-mistGrey space-y-3">
+                        <i class="fa-solid fa-folder-open text-3xl text-slate-700"></i>
+                        <p class="text-sm">No sub-sections created yet. Click "Add Sub-Section" above to get started.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = cat.sections.map(sec => {
+                const counts = countProgressItems(sec.exercises, isDiet);
+                const itemLabel = isDiet ? 'Meals' : 'Sets';
+                const secPercent = counts.total === 0 ? 0 : Math.round((counts.checked / counts.total) * 100);
+
+                return `
+                    <div class="glass-panel rounded-2xl p-5 border border-slate-800/90 space-y-5">
+                        <!-- Sub-Section Title Bar with Progress Bar -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800/80 pb-3 gap-3">
+                            <div class="flex items-center space-x-3">
+                                <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                                    <i class="fa-solid fa-layer-group text-cyanAccent text-xs"></i>
+                                    <span>${sec.title}</span>
+                                </h3>
+                                ${isDiet ? '' : `
+                                    <span class="text-xs px-2.5 py-0.5 rounded-full font-bold ${secPercent === 100 ? 'bg-cyanAccent/20 text-cyanAccent border border-cyanAccent/40' : 'bg-slate-800 text-mistGrey border border-slate-700'}">
+                                        ${counts.checked} / ${counts.total} ${itemLabel} (${secPercent}%)
+                                    </span>
+                                `}
+                            </div>
+
+                            <div class="flex items-center space-x-3 w-full sm:w-1/3">
+                                <div class="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800">
+                                    <div class="bg-cyanAccent h-2 rounded-full transition-all duration-300" style="width: ${secPercent}%;"></div>
+                                </div>
+                                <span class="text-xs text-cyanAccent font-extrabold">${secPercent}%</span>
+                                
+                                <div class="flex items-center space-x-1 pl-2 border-l border-slate-800">
+                                    <button onclick="openAddExerciseModal('${sec.id}')" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-900 border border-slate-700/80 text-cyanAccent hover:bg-slate-800 transition flex items-center gap-1">
+                                        <i class="fa-solid ${isDiet ? 'fa-utensils' : 'fa-plus'} text-[10px]"></i> ${isDiet ? 'Add Meal' : 'Exercise'}
+                                    </button>
+                                    <button onclick="deleteSection('${sec.id}')" class="text-mistGrey hover:text-red-400 text-xs px-1">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Exercises Under Sub-Section -->
+                        <div class="${isDiet ? 'grid grid-cols-1 md:grid-cols-2 gap-4 items-start' : 'space-y-4'}">
+                            ${(!sec.exercises || sec.exercises.length === 0) ? `
+                                <p class="text-xs text-mistGrey italic py-2">${isDiet ? 'No meals added to this section. Click "Add Meal" to get started.' : 'No exercises added to this section. Click "+ Exercise" to add one.'}</p>
+                            ` : sec.exercises.map(ex => isDiet ? renderMealCard(sec, ex) : `
+                                <div class="glass-panel p-4 rounded-xl border border-slate-800/80 space-y-3 bg-slate-900/40">
+                                    <!-- Exercise Title Header -->
+                                    <div class="flex items-center justify-between border-b border-slate-800/60 pb-2">
+                                        <div class="flex items-center space-x-2">
+                                            <i class="fa-solid fa-dumbbell text-cyanAccent text-xs"></i>
+                                            <h4 class="text-sm font-black text-white tracking-wide uppercase">${ex.title}</h4>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <button onclick="openAddSetModal('${sec.id}', '${ex.id}')" class="px-2 py-1 rounded-md text-[11px] font-bold bg-cyanAccent/10 border border-cyanAccent/30 text-cyanAccent hover:bg-cyanAccent/20 transition flex items-center gap-1">
+                                                <i class="fa-solid fa-plus text-[9px]"></i> Add Set
+                                            </button>
+                                            <button onclick="openEditExerciseModal('${sec.id}', '${ex.id}')" class="px-2 py-1 rounded-md text-[11px] font-bold bg-slate-800 border border-slate-700 text-mistGrey hover:text-white transition flex items-center gap-1">
+                                                <i class="fa-solid fa-pen text-[9px]"></i> Edit
+                                            </button>
+                                            <button onclick="deleteExercise('${sec.id}', '${ex.id}')" class="text-slate-600 hover:text-red-400 text-xs transition px-1">
+                                                <i class="fa-solid fa-trash-can"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Sets List under Exercise Header -->
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+                                        ${(!ex.sets || ex.sets.length === 0) ? `
+                                            <p class="text-[11px] text-mistGrey italic sm:col-span-2 lg:col-span-4">No set entries added yet. Click "+ Add Set".</p>
+                                        ` : ex.sets.map(st => `
+                                            <div class="flex min-w-0 items-center justify-between gap-2 p-2.5 rounded-lg bg-slate-900/80 border border-slate-800 hover:border-slate-700/80 transition">
+                                                <label class="flex min-w-0 items-center gap-2 cursor-pointer flex-grow">
+                                                    <input type="checkbox" ${st.checked ? 'checked' : ''} onchange="toggleSetCheck('${sec.id}', '${ex.id}', '${st.id}')" class="cyber-checkbox">
+                                                    <span class="truncate text-xs font-extrabold ${st.checked ? 'text-cyanAccent' : 'text-white'}">
+                                                        ${st.weight > 0 ? `${st.weight} kg` : ''} ${st.weight > 0 && st.reps > 0 ? 'X' : ''} ${st.reps > 0 ? `${st.reps} reps` : ''}
+                                                    </span>
+                                                </label>
+
+                                                <button onclick="deleteSet('${sec.id}', '${ex.id}', '${st.id}')" class="shrink-0 text-slate-600 hover:text-red-400 text-xs transition" aria-label="Delete set">
+                                                    <i class="fa-solid fa-xmark"></i>
+                                                </button>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            renderWorkoutLogs();
+        }
+
+        // Checkbox Toggle Handler with Automatic Real-Time Logging
+        function toggleSetCheck(secId, exId, setId) {
+            const cat = appState.find(c => c.id === activeCategoryId);
+            if (!cat) return;
+            const sec = cat.sections.find(s => s.id === secId);
+            if (!sec) return;
+            const ex = (sec.exercises || []).find(e => e.id === exId);
+            if (!ex) return;
+            const st = ex.sets.find(s => s.id === setId);
+            if (!st) return;
+
+            st.checked = !st.checked;
+
+            if (st.checked) {
+                // Instantly log set details into "Today's Weight & Reps Log"
+                const existingLogIndex = workoutLogs.findIndex(l => l.id === st.id);
+                const newLogEntry = {
+                    id: st.id,
+                    exercise: ex.title,
+                    group: sec.title,
+                    setLabel: st.label || 'Set',
+                    weight: st.weight || 0,
+                    reps: st.reps || 0
+                };
+
+                if (existingLogIndex >= 0) {
+                    workoutLogs[existingLogIndex] = newLogEntry;
+                } else {
+                    workoutLogs.unshift(newLogEntry);
+                }
+            } else {
+                // If unchecked, automatically remove entry from today's log table
+                workoutLogs = workoutLogs.filter(l => l.id !== st.id);
+            }
+
+            saveState();
+            saveWorkoutLogs();
+            recordWorkoutHistoryForToday();
+            renderCategoryView();
+        }
+
+        // Render Workout Logs Table
+        function renderWorkoutLogs() {
+            const tbody = document.getElementById('workout-log-tbody');
+            if (!tbody) return;
+
+            document.getElementById('log-count-badge').textContent = `${workoutLogs.length} Entries`;
+
+            let totalWeight = 0;
+            let totalSetsCount = 0;
+            let maxWeight = 0;
+
+            if (workoutLogs.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-mistGrey italic">No set checked today. Check any set above to immediately store it here.</td>
+                    </tr>
+                `;
+            } else {
+                tbody.innerHTML = workoutLogs.map(log => {
+                    const volume = log.weight * log.reps;
+                    totalWeight += Number(log.weight) || 0;
+                    totalSetsCount += 1;
+                    if (log.weight > maxWeight) maxWeight = log.weight;
+
+                    return `
+                        <tr class="hover:bg-slate-900/50">
+                            <td class="py-2.5 px-3 font-semibold text-white uppercase">${log.exercise}</td>
+                            <td class="py-2.5 px-3 text-mistGrey">${log.group || 'Gym'}</td>
+                            <td class="py-2.5 px-3 font-bold text-cyanAccent">${log.setLabel || 'Set'}</td>
+                            <td class="py-2.5 px-3 text-slate-200">${log.reps} reps</td>
+                            <td class="py-2.5 px-3 font-extrabold text-white">${log.weight} kg</td>
+                            <td class="py-2.5 px-3 font-bold text-violet-300">${volume.toLocaleString()} kg</td>
+                            <td class="py-2.5 px-3 text-right">
+                                <button onclick="deleteWorkoutLog('${log.id}')" class="text-slate-600 hover:text-red-400">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            document.getElementById('stat-total-volume').textContent = `${totalWeight.toLocaleString()} kg`;
+            document.getElementById('stat-total-sets').textContent = `${totalSetsCount} Sets`;
+            document.getElementById('stat-max-weight').textContent = `${maxWeight} kg`;
+        }
+
+        function deleteWorkoutLog(logId) {
+            workoutLogs = workoutLogs.filter(l => l.id !== logId);
+            // Uncheck in tracker
+            appState.forEach(cat => {
+                cat.sections.forEach(sec => {
+                    (sec.exercises || []).forEach(ex => {
+                        (ex.sets || []).forEach(st => {
+                            if (st.id === logId) st.checked = false;
+                        });
+                    });
+                });
+            });
+            saveState();
+            saveWorkoutLogs();
+            recordWorkoutHistoryForToday();
+            if (activeCategoryId) renderCategoryView();
+        }
+
+        // Modal Helpers & Handlers for Exercises & Sets
+        function openAddExerciseModal(secId) {
+            const category = appState.find(item => item.id === activeCategoryId);
+            const isDiet = isDietCategory(category);
+            document.getElementById('target-exercise-sec-id').value = secId;
+            document.getElementById('add-exercise-modal-title').textContent = isDiet ? 'Add Meal' : 'Add Exercise Title';
+            document.getElementById('add-exercise-modal-icon').className = `fa-solid ${isDiet ? 'fa-utensils' : 'fa-dumbbell'} text-cyanAccent`;
+            document.getElementById('add-exercise-name-label').textContent = isDiet ? 'Meal Name' : 'Exercise Name';
+            document.getElementById('exercise-title-input').placeholder = isDiet ? 'e.g. Protein Shake, Breakfast Bowl' : 'e.g. Bench Press, Incline DB Fly';
+            document.getElementById('add-exercise-submit').textContent = isDiet ? 'Add Meal' : 'Add Exercise';
+            document.getElementById('modal-add-exercise').classList.remove('hidden');
+        }
+
+        function handleAddExercise(e) {
+            e.preventDefault();
+            const secId = document.getElementById('target-exercise-sec-id').value;
+            const title = document.getElementById('exercise-title-input').value.trim();
+
+            if (!title || !secId || !activeCategoryId) return;
+
+            const cat = appState.find(c => c.id === activeCategoryId);
+            if (cat) {
+                const sec = cat.sections.find(s => s.id === secId);
+                if (sec) {
+                    if (!sec.exercises) sec.exercises = [];
+                    const newEntry = {
+                        id: 'ex-' + Date.now(),
+                        title: title,
+                        ...(isDietCategory(cat) ? { checked: false, ingredients: [] } : { sets: [] })
+                    };
+                    sec.exercises.push(newEntry);
+                    saveState();
+                    closeModal('modal-add-exercise');
+                    document.getElementById('form-add-exercise').reset();
+                    renderCategoryView();
+                }
+            }
+        }
+
+        function openAddSetModal(secId, exId) {
+            const category = appState.find(item => item.id === activeCategoryId);
+            if (isDietCategory(category)) {
+                document.getElementById('target-ingredient-sec-id').value = secId;
+                document.getElementById('target-ingredient-meal-id').value = exId;
+                ingredientEntryMode = 'append';
+                document.getElementById('ingredient-modal-title').textContent = 'Add Meal Details';
+                document.getElementById('save-ingredient-details').textContent = 'Add Details';
+                document.getElementById('ingredient-input-rows').innerHTML = '';
+                document.getElementById('modal-add-ingredient').classList.remove('hidden');
+                addIngredientInputRow(true);
+                return;
+            }
+            document.getElementById('target-set-sec-id').value = secId;
+            document.getElementById('target-set-ex-id').value = exId;
+            document.getElementById('modal-add-set').classList.remove('hidden');
+        }
+
+        function openQuickFoodModal() {
+            document.getElementById('form-quick-food').reset();
+            document.getElementById('modal-quick-food').classList.remove('hidden');
+            document.getElementById('quick-food-name').focus();
+        }
+
+        function handleQuickFoodEntry(event) {
+            event.preventDefault();
+            const name = document.getElementById('quick-food-name').value.trim();
+            const grams = Number(document.getElementById('quick-food-quantity').value);
+            if (!name || !Number.isFinite(grams) || grams <= 0) return;
+
+            const category = appState.find(isDietCategory);
+            if (!category) return;
+            let section = category.sections.find(item => item.id === 'sec-food-log');
+            if (!section) {
+                section = { id: 'sec-food-log', title: 'Food Log', exercises: [] };
+                category.sections.push(section);
+            }
+
+            const id = `food-${Date.now()}`;
+            const readMacro = field => {
+                const value = document.getElementById(`quick-food-${field}`).value;
+                return value === '' ? null : Number(value);
+            };
+            section.exercises.push({
+                id,
+                title: name,
+                checked: true,
+                ingredients: [{
+                    id: `ingredient-${id}`,
+                    name,
+                    grams,
+                    calories: readMacro('calories'),
+                    protein: readMacro('protein'),
+                    carbs: readMacro('carbs'),
+                    fat: readMacro('fat')
+                }]
+            });
+
+            saveState();
+            closeModal('modal-quick-food');
+            document.getElementById('form-quick-food').reset();
+            if (activeCategoryId && isDietCategory(appState.find(item => item.id === activeCategoryId))) renderCategoryView();
+            showToast('Food added to Today\'s Meals');
+        }
+
+        function ingredientInputRowIsValid(row) {
+            const name = row.querySelector('[data-field="name"]');
+            const grams = row.querySelector('[data-field="grams"]');
+            const optionalFields = Array.from(row.querySelectorAll('input[data-field]:not([data-field="name"]):not([data-field="grams"])'));
+            return Boolean(name.value.trim()) && grams.value !== '' && grams.checkValidity() && optionalFields.every(field => field.value === '' || field.checkValidity());
+        }
+
+        function nutritionInputValue(ingredient, metric) {
+            if (!ingredient) return '';
+            if (ingredient[metric] !== null && ingredient[metric] !== undefined && ingredient[metric] !== '') return Number(ingredient[metric]);
+            const nutrition = getIngredientNutrition(ingredient);
+            return nutrition.entered[metric] ? Number(nutrition[metric].toFixed(1)) : '';
+        }
+
+        function updateIngredientInputActions() {
+            const rows = Array.from(document.querySelectorAll('#ingredient-input-rows .ingredient-input-row'));
+            const canContinue = rows.length > 0 && rows.every(ingredientInputRowIsValid);
+            document.getElementById('add-more-ingredient-button').disabled = !canContinue;
+            document.getElementById('save-ingredient-details').disabled = !canContinue;
+            rows.forEach((row, index) => {
+                row.querySelector('[aria-label="Remove ingredient"]').classList.toggle('hidden', rows.length === 1);
+            });
+        }
+
+        function addIngredientInputRow(initial = false, ingredient = null) {
+            const container = document.getElementById('ingredient-input-rows');
+            const rows = Array.from(container.querySelectorAll('.ingredient-input-row'));
+            if (!initial && (!rows.length || !rows.every(ingredientInputRowIsValid))) return;
+
+            const row = document.createElement('div');
+            row.className = 'ingredient-input-row grid grid-cols-2 lg:grid-cols-6 items-end gap-2 rounded-lg border border-slate-800 bg-slate-900/60 p-3';
+            row.innerHTML = `
+                <label class="text-[10px] font-semibold text-mistGrey">Ingredient
+                    <input data-field="name" type="text" required value="${escapeHtml(ingredient && ingredient.name || '')}" placeholder="Oats" class="mt-1 w-full min-w-0 bg-slate-950 border border-slate-700 rounded-md px-2 py-2 text-xs text-white focus:outline-none focus:border-cyanAccent">
+                </label>
+                <label class="text-[10px] font-semibold text-mistGrey">Amount (g)
+                    <input data-field="grams" type="number" required min="0.1" step="0.1" value="${ingredient ? Number(ingredient.grams) || '' : ''}" placeholder="40" class="mt-1 w-full min-w-0 bg-slate-950 border border-slate-700 rounded-md px-2 py-2 text-xs text-white focus:outline-none focus:border-cyanAccent">
+                </label>
+                <label class="text-[10px] font-semibold text-mistGrey">Calories
+                    <input data-field="calories" type="number" min="0" step="0.1" value="${nutritionInputValue(ingredient, 'calories')}" placeholder="150" class="mt-1 w-full min-w-0 bg-slate-950 border border-slate-700 rounded-md px-2 py-2 text-xs text-white focus:outline-none focus:border-cyanAccent">
+                </label>
+                <label class="text-[10px] font-semibold text-mistGrey">Protein (g)
+                    <input data-field="protein" type="number" min="0" step="0.1" value="${nutritionInputValue(ingredient, 'protein')}" placeholder="5" class="mt-1 w-full min-w-0 bg-slate-950 border border-slate-700 rounded-md px-2 py-2 text-xs text-white focus:outline-none focus:border-cyanAccent">
+                </label>
+                <label class="text-[10px] font-semibold text-mistGrey">Carbs (g)
+                    <input data-field="carbs" type="number" min="0" step="0.1" value="${nutritionInputValue(ingredient, 'carbs')}" placeholder="27" class="mt-1 w-full min-w-0 bg-slate-950 border border-slate-700 rounded-md px-2 py-2 text-xs text-white focus:outline-none focus:border-cyanAccent">
+                </label>
+                <div class="flex items-end gap-1">
+                    <label class="flex-1 text-[10px] font-semibold text-mistGrey">Fat (g)
+                        <input data-field="fat" type="number" min="0" step="0.1" value="${nutritionInputValue(ingredient, 'fat')}" placeholder="3" class="mt-1 w-full min-w-0 bg-slate-950 border border-slate-700 rounded-md px-2 py-2 text-xs text-white focus:outline-none focus:border-cyanAccent">
+                    </label>
+                    <button type="button" onclick="removeIngredientInputRow(this)" aria-label="Remove ingredient" class="hidden mb-1 px-1.5 py-2 text-slate-500 hover:text-red-400">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+            `;
+            row.querySelectorAll('input').forEach(input => input.addEventListener('input', updateIngredientInputActions));
+            container.appendChild(row);
+            updateIngredientInputActions();
+            row.querySelector('[data-field="name"]').focus();
+        }
+
+        function openEditMealDetailsModal(secId, mealId) {
+            const category = appState.find(item => item.id === activeCategoryId);
+            const section = category && category.sections.find(item => item.id === secId);
+            const meal = section && (section.exercises || []).find(item => item.id === mealId);
+            if (!meal) return;
+
+            ingredientEntryMode = 'replace';
+            document.getElementById('target-ingredient-sec-id').value = secId;
+            document.getElementById('target-ingredient-meal-id').value = mealId;
+            document.getElementById('ingredient-modal-title').textContent = `Edit ${meal.title} Details`;
+            document.getElementById('save-ingredient-details').textContent = 'Save Details';
+            document.getElementById('ingredient-input-rows').innerHTML = '';
+            document.getElementById('modal-add-ingredient').classList.remove('hidden');
+            const ingredients = meal.ingredients || [];
+            if (ingredients.length) ingredients.forEach(ingredient => addIngredientInputRow(true, ingredient));
+            else addIngredientInputRow(true);
+            updateIngredientInputActions();
+        }
+
+        function removeIngredientInputRow(button) {
+            const row = button.closest('.ingredient-input-row');
+            if (row) row.remove();
+            updateIngredientInputActions();
+        }
+
+        function handleAddIngredient(event) {
+            event.preventDefault();
+            const secId = document.getElementById('target-ingredient-sec-id').value;
+            const mealId = document.getElementById('target-ingredient-meal-id').value;
+            const rows = Array.from(document.querySelectorAll('#ingredient-input-rows .ingredient-input-row'));
+            if (!secId || !mealId || !rows.length || !rows.every(ingredientInputRowIsValid) || !activeCategoryId) return;
+
+            const category = appState.find(item => item.id === activeCategoryId);
+            const section = category && category.sections.find(item => item.id === secId);
+            const meal = section && (section.exercises || []).find(item => item.id === mealId);
+            if (!meal) return;
+
+            if (!Array.isArray(meal.ingredients)) meal.ingredients = [];
+            const addedIngredients = rows.map((row, index) => ({
+                id: `ing-${Date.now()}-${index}`,
+                name: row.querySelector('[data-field="name"]').value.trim(),
+                grams: Number(row.querySelector('[data-field="grams"]').value),
+                calories: row.querySelector('[data-field="calories"]').value === '' ? null : Number(row.querySelector('[data-field="calories"]').value),
+                protein: row.querySelector('[data-field="protein"]').value === '' ? null : Number(row.querySelector('[data-field="protein"]').value),
+                carbs: row.querySelector('[data-field="carbs"]').value === '' ? null : Number(row.querySelector('[data-field="carbs"]').value),
+                fat: row.querySelector('[data-field="fat"]').value === '' ? null : Number(row.querySelector('[data-field="fat"]').value)
+            }));
+            if (ingredientEntryMode === 'replace') meal.ingredients = addedIngredients;
+            else meal.ingredients.push(...addedIngredients);
+            ingredientEntryMode = 'append';
+            saveState();
+            closeModal('modal-add-ingredient');
+            document.getElementById('ingredient-input-rows').innerHTML = '';
+            renderCategoryView();
+        }
+
+        function toggleMealCheck(secId, mealId) {
+            const category = appState.find(item => item.id === activeCategoryId);
+            const section = category && category.sections.find(item => item.id === secId);
+            const meal = section && (section.exercises || []).find(item => item.id === mealId);
+            if (!meal) return;
+
+            meal.checked = !meal.checked;
+            saveState();
+            renderCategoryView();
+        }
+
+        function escapeHtml(value) {
+            return String(value).replace(/[&<>"']/g, character => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            })[character]);
+        }
+
+        function openEditExerciseModal(secId, exId) {
+            const cat = appState.find(category => category.id === activeCategoryId);
+            const sec = cat && cat.sections.find(section => section.id === secId);
+            const ex = sec && (sec.exercises || []).find(exercise => exercise.id === exId);
+            if (!ex) return;
+
+            document.getElementById('edit-exercise-sec-id').value = secId;
+            document.getElementById('edit-exercise-id').value = exId;
+            document.getElementById('edit-exercise-title').value = ex.title;
+            document.getElementById('edit-exercise-sets').innerHTML = (ex.sets || []).map((st, index) => `
+                <div class="edit-set-row grid grid-cols-[minmax(0,1fr)_90px_75px_auto] items-end gap-2 rounded-lg border border-slate-800 bg-slate-900/60 p-2" data-set-id="${escapeHtml(st.id)}">
+                    <div>
+                        <label class="block text-[10px] font-semibold text-mistGrey mb-1">Set name</label>
+                        <input data-field="label" type="text" value="${escapeHtml(st.label || `Set ${index + 1}`)}" class="w-full min-w-0 bg-slate-950 border border-slate-700 rounded-md px-2 py-2 text-xs text-white focus:outline-none focus:border-cyanAccent">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-semibold text-mistGrey mb-1">Weight (kg)</label>
+                        <input data-field="weight" type="number" min="0" step="0.5" value="${Number(st.weight) || 0}" class="w-full min-w-0 bg-slate-950 border border-slate-700 rounded-md px-2 py-2 text-xs text-white focus:outline-none focus:border-cyanAccent">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-semibold text-mistGrey mb-1">Reps</label>
+                        <input data-field="reps" type="number" min="0" value="${Number(st.reps) || 0}" class="w-full min-w-0 bg-slate-950 border border-slate-700 rounded-md px-2 py-2 text-xs text-white focus:outline-none focus:border-cyanAccent">
+                    </div>
+                    <button type="button" onclick="this.closest('.edit-set-row').remove()" class="h-8 px-2 text-slate-500 hover:text-red-400" aria-label="Remove set">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+            `).join('') || '<p class="text-xs text-mistGrey italic">No sets to edit.</p>';
+            document.getElementById('modal-edit-exercise').classList.remove('hidden');
+        }
+
+        function handleEditExercise(event) {
+            event.preventDefault();
+            const secId = document.getElementById('edit-exercise-sec-id').value;
+            const exId = document.getElementById('edit-exercise-id').value;
+            const title = document.getElementById('edit-exercise-title').value.trim();
+            if (!title || !activeCategoryId) return;
+
+            const cat = appState.find(category => category.id === activeCategoryId);
+            const sec = cat && cat.sections.find(section => section.id === secId);
+            const ex = sec && (sec.exercises || []).find(exercise => exercise.id === exId);
+            if (!ex) return;
+
+            const rows = Array.from(document.querySelectorAll('#edit-exercise-sets .edit-set-row'));
+            const editedSets = rows.map(row => {
+                const set = ex.sets.find(item => item.id === row.dataset.setId);
+                if (!set) return null;
+                set.label = row.querySelector('[data-field="label"]').value.trim();
+                set.weight = parseFloat(row.querySelector('[data-field="weight"]').value) || 0;
+                set.reps = parseInt(row.querySelector('[data-field="reps"]').value, 10) || 0;
+                return set;
+            }).filter(Boolean);
+            const retainedSetIds = new Set(editedSets.map(set => set.id));
+            workoutLogs = workoutLogs.filter(log => !ex.sets.some(set => set.id === log.id && !retainedSetIds.has(set.id)));
+            ex.title = title;
+            ex.sets = editedSets;
+
+            editedSets.forEach(set => {
+                const logIndex = workoutLogs.findIndex(entry => entry.id === set.id);
+                if (!set.checked) {
+                    if (logIndex >= 0) workoutLogs.splice(logIndex, 1);
+                    return;
+                }
+
+                const logEntry = {
+                    id: set.id,
+                    exercise: ex.title,
+                    group: sec.title,
+                    setLabel: set.label || 'Set',
+                    weight: set.weight,
+                    reps: set.reps
+                };
+                if (logIndex >= 0) {
+                    workoutLogs[logIndex] = logEntry;
+                } else {
+                    workoutLogs.unshift(logEntry);
+                }
+            });
+
+            saveState();
+            saveWorkoutLogs();
+            closeModal('modal-edit-exercise');
+            renderCategoryView();
+        }
+
+        function handleAddSet(e) {
+            e.preventDefault();
+            const secId = document.getElementById('target-set-sec-id').value;
+            const exId = document.getElementById('target-set-ex-id').value;
+            const label = document.getElementById('set-label-input').value.trim();
+            const weight = parseFloat(document.getElementById('set-weight-input').value) || 0;
+            const reps = parseInt(document.getElementById('set-reps-input').value) || 0;
+
+            if (!secId || !exId || !activeCategoryId) return;
+
+            const cat = appState.find(c => c.id === activeCategoryId);
+            if (cat) {
+                const sec = cat.sections.find(s => s.id === secId);
+                if (sec) {
+                    const ex = (sec.exercises || []).find(e => e.id === exId);
+                    if (ex) {
+                        if (!ex.sets) ex.sets = [];
+                        const setNumber = ex.sets.length + 1;
+                        ex.sets.push({
+                            id: 'st-' + Date.now(),
+                            label: label || `Set ${setNumber}`,
+                            weight: weight,
+                            reps: reps,
+                            checked: false
+                        });
+                        saveState();
+                        closeModal('modal-add-set');
+                        document.getElementById('form-add-set').reset();
+                        renderCategoryView();
+                    }
+                }
+            }
+        }
+
+        function deleteExercise(secId, exId) {
+            const cat = appState.find(c => c.id === activeCategoryId);
+            if (!cat) return;
+            const sec = cat.sections.find(s => s.id === secId);
+            if (!sec) return;
+            sec.exercises = sec.exercises.filter(e => e.id !== exId);
+            saveState();
+            recordWorkoutHistoryForToday();
+            renderCategoryView();
+        }
+
+        function deleteSet(secId, exId, setId) {
+            const cat = appState.find(c => c.id === activeCategoryId);
+            if (!cat) return;
+            const sec = cat.sections.find(s => s.id === secId);
+            if (!sec) return;
+            const ex = (sec.exercises || []).find(e => e.id === exId);
+            if (!ex) return;
+            ex.sets = ex.sets.filter(s => s.id !== setId);
+            workoutLogs = workoutLogs.filter(l => l.id !== setId);
+            saveState();
+            saveWorkoutLogs();
+            recordWorkoutHistoryForToday();
+            renderCategoryView();
+        }
+
+        function handleAddSection(e) {
+            e.preventDefault();
+            const title = document.getElementById('section-name').value.trim();
+            if (!title || !activeCategoryId) return;
+
+            const cat = appState.find(c => c.id === activeCategoryId);
+            if (cat) {
+                cat.sections.push({
+                    id: 'sec-' + Date.now(),
+                    title: title,
+                    exercises: []
+                });
+                saveState();
+                closeModal('modal-add-section');
+                document.getElementById('form-add-section').reset();
+                renderCategoryView();
+            }
+        }
+
+        function deleteSection(secId) {
+            const cat = appState.find(c => c.id === activeCategoryId);
+            if (!cat) return;
+            cat.sections = cat.sections.filter(s => s.id !== secId);
+            saveState();
+            recordWorkoutHistoryForToday();
+            renderCategoryView();
+        }
+
+        function deleteActiveCategory() {
+            appState = appState.filter(c => c.id !== activeCategoryId);
+            saveState();
+            recordWorkoutHistoryForToday();
+            switchView('dashboard');
+        }
+
+        function resetAllDaily() {
+            appState.forEach(cat => {
+                cat.sections.forEach(sec => {
+                    (sec.exercises || []).forEach(ex => {
+                        if (isDietCategory(cat)) {
+                            ex.checked = false;
+                        } else {
+                            (ex.sets || []).forEach(st => {
+                                st.checked = false;
+                            });
+                        }
+                    });
+                });
+            });
+            workoutLogs = [];
+            saveWorkoutLogs();
+            saveState();
+            recordWorkoutHistoryForToday();
+            if (activeCategoryId) {
+                renderCategoryView();
+            } else {
+                renderDashboard();
+            }
+        }
+
+        function openAddSectionModal() {
+            document.getElementById('modal-add-section').classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
